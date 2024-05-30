@@ -1,8 +1,9 @@
-// app/api/generateMessage/route.ts
+// app/api/chat/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
+  const { messages } = await request.json();
   const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 
   try {
@@ -10,13 +11,7 @@ export async function GET(request: NextRequest) {
       "https://api.openai.com/v1/chat/completions",
       {
         model: "gpt-3.5-turbo",
-        messages: [
-          { role: "system", content: "You are a helpful assistant." },
-          {
-            role: "user",
-            content: "Generate a welcome message for the login page.",
-          },
-        ],
+        messages,
       },
       {
         headers: {
