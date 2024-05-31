@@ -9,16 +9,14 @@ const Main = () => {
   const router = useRouter();
   const { data } = useSession({
     required: true,
-    // onUnauthenticated() {
-    //   router.replace(".//login");
-    // },
+    onUnauthenticated() {
+      router.replace(".//login");
+    },
   });
 
-  if(!data || !isGuest) {
-    router.replace(".//login");
-  }
-
-  
+  // if(!data && !isGuest) {
+  //   router.replace(".//login");
+  // }
 
   return (
     <div className="flex items-center justify-center h-screen bg-black text-white">
