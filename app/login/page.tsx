@@ -12,7 +12,7 @@ export default function Login() {
     <div className="flex justify-center h-screen bg-black text-white">
       {session ? (
         <div className="grid m-auto text-center">
-          <Image src="title.png" alt="Escape Anywhere" className="m-4" />
+          <img src="/title.png" alt="Escape Anywhere" className="m-4" />
           <div className="flex flex-col items-center justify-center">
             <button
               className={
@@ -42,7 +42,7 @@ export default function Login() {
         </div>
       ) : (
         <div className="grid m-auto text-center">
-          <Image src="title.png" alt="Escape Anywhere" className="m-4" />
+          <img src="/title.png" alt="Escape Anywhere" className="m-4" />
           <div className="flex flex-col items-center justify-center">
             <button
               className={
