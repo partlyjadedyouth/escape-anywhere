@@ -36,6 +36,9 @@ export default function Login() {
     <>
       <div className="flex flex-col items-center justify-center">
         {/* flex 컨테이너로, 세로 방향으로 정렬하고, 가운데 정렬합니다. */}
+        <p className="font-bold mb-3 text-xl">
+          순위 기록을 위해 아이디를 입력해주세요.
+        </p>
         <div>
           {/* input과 버튼을 포함하는 div입니다. */}
           <input

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const Theme = () => {
+export default function Theme() {
   const router = useRouter();
 
   const [theme, setTheme] = useState({ value: "", selected: false });
@@ -23,7 +23,7 @@ const Theme = () => {
       return (
         <div
           className="flex flex-col items-center justify-center min-h-screen bg-black text-white bg-center bg-cover"
-          style={{ backgroundImage: "url('background.png')" }}
+          style={{ backgroundImage: "url('/image/background.png')" }}
         >
           <h1 className="text-center text-2xl font-bold mb-4">
             원하는 방탈출 컨셉을 설명해주세요
@@ -103,6 +103,4 @@ const Theme = () => {
         </div>
       );
   }
-};
-
-export default Theme;
+}
