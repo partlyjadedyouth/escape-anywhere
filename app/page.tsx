@@ -19,7 +19,7 @@ export default function Home() {
         />
       </div>
       <button
-        className="hover:underline sm:text-3xl text-xl font-NanumMyeongjo"
+        className="hover:underline sm:text-3xl text-xl"
         onClick={() => router.push("/login")}
       >
         바로 시작하기
