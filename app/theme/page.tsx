@@ -81,8 +81,8 @@ export default function Theme() {
               "w-40 py-2 px-4 bg-transparent hover:underline focus:outline-none"
             }
             // 버튼 스타일을 설정합니다.
-            onClick={() => router.push("/")}
-            // 버튼 클릭 시 루트 경로로 이동하도록 설정합니다.
+            onClick={() => router.push("/game")}
+            // 버튼 클릭 시 game 경로로 이동하도록 설정합니다.
           >
             시작하기
             {/* 버튼의 텍스트입니다. */}
