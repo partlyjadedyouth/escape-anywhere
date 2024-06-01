@@ -9,12 +9,14 @@ export default function Home() {
   return (
     <div className="flex justify-center h-screen bg-black text-white">
       <div className="flex flex-col items-center justify-center gap-48">
-        <div className="w-3/5">
+        <div className="w-5/6 max-w-7xl">
           <Image
             src="/image/title.png"
             alt="Title"
-            width={10000}
-            height={10000}
+            width={0}
+            height={0}
+            sizes="100vw"
+            className="w-full h-full"
           />
         </div>
         <button
