@@ -19,7 +19,7 @@ export default function Theme() {
     // 버튼 클릭 이벤트를 처리하는 함수입니다.
     if (theme.length === 0) {
       // theme이 빈 문자열인 경우
-      alert("테마를 입력해주세요"); // 경고 메시지를 표시합니다.
+      alert("컨셉을 입력해주세요"); // 경고 메시지를 표시합니다.
       return; // 함수 실행을 종료합니다.
     } else {
       console.log(theme); // theme을 콘솔에 출력합니다.
