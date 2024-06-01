@@ -19,7 +19,7 @@ const Main = () => {
   // }
 
   return (
-    <div className="flex items-center justify-center h-screen bg-black text-white">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white bg-center bg-cover" style={{backgroundImage: "url('image.png')"}}>
       {/* 저장된 테마 정보를 불러오기 */}
       <Game />
     </div>
