@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@langchain/openai": "^0.1.1",
     "axios": "^1.7.2",
     "firebase": "^10.12.2",
+    "langchain": "^0.2.4",
     "next": "14.2.3",
     "next-auth": "^4.24.7",
-    "openai": "^4.47.2",
+    "openai": "^4.47.3",
     "react": "^18",
     "react-dom": "^18"
   },

@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "NanumMyeongjo";
+  font-weight: 700;
+  font-style: normal;
+  src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumMyeongjoEB.woff2)
+    format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "NanumMyeongjo";
+  font-weight: 500;
+  font-style: normal;
+  src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumMyeongjoB.woff2)
+    format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "NanumMyeongjo";
+  font-weight: 400;
+  font-style: normal;
+  src: url(https://cdn.jsdelivr.net/gh/webfontworld/naver/NanumMyeongjo.woff2)
+    format("woff2");
+  font-display: swap;
+}
