@@ -1,6 +1,6 @@
 "use client"; // 이 파일이 클라이언트 측에서 실행됨을 나타냅니다.
 
-import { useState, useEffect } from "react"; // useState와 useEffect 훅을 임포트합니다.
+import { useState, useEffect, Suspense } from "react"; // useState와 useEffect 훅을 임포트합니다.
 import { useSearchParams } from "next/navigation"; // Next.js의 useSearchParams 훅을 임포트합니다.
 
 interface ChatMessage {
@@ -105,40 +105,41 @@ export default function Game() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-end h-screen bg-transparent text-white w-full px-4">
-      {/* 화면을 가득 채우는 flex 컨테이너로, 세로 방향으로 정렬하고, 아래쪽에 배치합니다. */}
-      <div
-        className="w-full h-64 p-4 mb-4 overflow-auto"
-        // 메시지 영역의 스타일을 설정합니다.
-        style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-        // 배경색을 반투명한 검은색으로 설정합니다.
-      >
-        {messages.length > 0 ? getLastBotMessage()!.message : ""}
-        {/* 메시지가 있는 경우 마지막 봇 메시지를 표시합니다. */}
-      </div>
-
-      <div className="w-full flex items-center justify-between mb-4">
-        {/* 입력 및 전송 버튼을 포함하는 컨테이너입니다. */}
-        <input
-          type="text"
-          // input 요소의 타입을 텍스트로 설정합니다.
-          className="flex-grow h-10 p-4 bg-white text-black"
-          // CSS 클래스를 설정하여 스타일을 지정합니다.
-          value={input}
-          // input 요소의 값을 input 상태로 설정합니다.
-          onChange={(e) => setInput(e.target.value)}
-          // input 요소의 변경 이벤트를 처리하는 함수를 설정합니다.
-        />
-        <button
-          className="w-40 h-10 bg-transparent hover:underline focus:outline-none"
-          // 버튼의 스타일을 설정합니다.
-          onClick={handleSendMessage}
-          // 버튼 클릭 이벤트를 처리하는 함수를 설정합니다.
+    <Suspense>
+      <div className="flex flex-col items-center justify-end h-screen bg-transparent text-white w-full px-4">
+        {/* 화면을 가득 채우는 flex 컨테이너로, 세로 방향으로 정렬하고, 아래쪽에 배치합니다. */}
+        <div
+          className="w-full h-64 p-4 mb-4 overflow-auto"
+          // 메시지 영역의 스타일을 설정합니다.
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          // 배경색을 반투명한 검은색으로 설정합니다.
         >
-          전송
-          {/* 버튼의 텍스트입니다. */}
-        </button>
+          {messages.length > 0 ? getLastBotMessage()!.message : ""}
+          {/* 메시지가 있는 경우 마지막 봇 메시지를 표시합니다. */}
+        </div>
+        <div className="w-full flex items-center justify-between mb-4">
+          {/* 입력 및 전송 버튼을 포함하는 컨테이너입니다. */}
+          <input
+            type="text"
+            // input 요소의 타입을 텍스트로 설정합니다.
+            className="flex-grow h-10 p-4 bg-white text-black"
+            // CSS 클래스를 설정하여 스타일을 지정합니다.
+            value={input}
+            // input 요소의 값을 input 상태로 설정합니다.
+            onChange={(e) => setInput(e.target.value)}
+            // input 요소의 변경 이벤트를 처리하는 함수를 설정합니다.
+          />
+          <button
+            className="w-40 h-10 bg-transparent hover:underline focus:outline-none"
+            // 버튼의 스타일을 설정합니다.
+            onClick={handleSendMessage}
+            // 버튼 클릭 이벤트를 처리하는 함수를 설정합니다.
+          >
+            전송
+            {/* 버튼의 텍스트입니다. */}
+          </button>
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 }
