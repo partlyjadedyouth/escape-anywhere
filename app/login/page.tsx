@@ -19,7 +19,7 @@ export default function Login() {
       alert("ID를 입력해주세요"); // 경고 메시지를 표시합니다.
       return; // 함수 실행을 종료합니다.
     } else {
-      console.log(userId); // userId를 콘솔에 출력합니다.
+      // console.log(userId); // userId를 콘솔에 출력합니다.
       router.push(`/theme?userId=${userId}`); // userId를 쿼리 매개변수로 포함하여 '/theme' 경로로 이동합니다.
     }
   };

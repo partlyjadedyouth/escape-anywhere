@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 interface ChatMessage {
   sender: string;
@@ -9,6 +10,9 @@ interface ChatMessage {
 }
 
 export default function Game() {
+  const searchParams = useSearchParams(); // useSearchParams 훅을 사용하여 searchParams 객체를 생성합니다.
+  const userId = searchParams.get("userId"); // userId를 쿼리 매개변수로부터 가져옵니다.
+
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState<string>("");
   const [activateInput, setActivateInput] = useState<boolean>(false);
@@ -76,7 +80,7 @@ export default function Game() {
 
       setMessages((prev) => [...prev, botMessage]);
 
-      console.log(messages);
+      // console.log(messages);
     } catch (error) {
       console.error("Failed to send message", error);
     } finally {

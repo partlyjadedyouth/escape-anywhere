@@ -23,7 +23,7 @@ export default function Theme() {
       alert("컨셉을 입력해주세요"); // 경고 메시지를 표시합니다.
       return; // 함수 실행을 종료합니다.
     } else {
-      console.log(theme); // theme을 콘솔에 출력합니다.
+      // console.log(theme); // theme을 콘솔에 출력합니다.
       setIsThemeSelected(true); // isThemeSelected 상태를 true로 설정합니다.
     }
   };
