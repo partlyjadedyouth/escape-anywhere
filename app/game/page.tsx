@@ -12,8 +12,6 @@ interface ChatMessage {
 
 export default function Game() {
   // Game 컴포넌트를 기본으로 내보냅니다.
-  const searchParams = useSearchParams(); // useSearchParams 훅을 사용하여 searchParams 객체를 생성합니다.
-  const userId = searchParams.get("userId"); // userId를 쿼리 매개변수로부터 가져옵니다.
 
   const [messages, setMessages] = useState<ChatMessage[]>([]); // messages 상태를 빈 배열로 초기화합니다.
   const [input, setInput] = useState<string>(""); // input 상태를 빈 문자열로 초기화합니다.
