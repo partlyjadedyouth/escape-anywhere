@@ -1,11 +1,12 @@
 "use client"; // 이 파일이 클라이언트 측에서 실행됨을 나타냅니다.
 
 import React, { useState } from "react"; // React와 useState 훅을 임포트합니다.
-import { useRouter } from "next/navigation"; // Next.js의 useRouter 훅을 임포트합니다.
+import { useRouter, useSearchParams } from "next/navigation"; // Next.js의 useRouter 훅을 임포트합니다.
 
 export default function Theme() {
-  // Theme 컴포넌트를 기본으로 내보냅니다.
   const router = useRouter(); // useRouter 훅을 사용하여 router 객체를 생성합니다.
+  const searchParams = useSearchParams(); // useSearchParams 훅을 사용하여 searchParams 객체를 생성합니다.
+  const userId = searchParams.get("userId"); // userId를 쿼리 매개변수로부터 가져옵니다.
 
   const [theme, setTheme] = useState<string>(""); // theme 상태를 빈 문자열로 초기화합니다.
   const [isThemeSelected, setIsThemeSelected] = useState<boolean>(false); // isThemeSelected 상태를 false로 초기화합니다.
@@ -81,8 +82,8 @@ export default function Theme() {
               "w-40 py-2 px-4 bg-transparent hover:underline focus:outline-none"
             }
             // 버튼 스타일을 설정합니다.
-            onClick={() => router.push("/game")}
-            // 버튼 클릭 시 game 경로로 이동하도록 설정합니다.
+            onClick={() => router.push(`/game?userId=${userId}`)}
+            // 버튼 클릭 시 game 경로로 이동하도록 설정합니다. userId를 쿼리 매개변수로 포함합니다.
           >
             시작하기
             {/* 버튼의 텍스트입니다. */}

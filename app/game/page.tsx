@@ -36,7 +36,7 @@ export default function Game() {
 
         setMessages([initialBotMessage]);
 
-        console.log(messages);
+        // console.log(messages);
       } catch (error) {
         console.error("Failed to send initial message", error);
       }

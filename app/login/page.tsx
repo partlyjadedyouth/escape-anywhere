@@ -4,7 +4,6 @@ import { useState } from "react"; // useState 훅을 임포트합니다.
 import { useRouter } from "next/navigation"; // Next.js의 useRouter 훅을 임포트합니다.
 
 export default function Login() {
-  // Login 컴포넌트를 기본으로 내보냅니다.
   const router = useRouter(); // useRouter 훅을 사용하여 router 객체를 생성합니다.
   const [userId, setUserId] = useState(""); // userId 상태를 빈 문자열로 초기화합니다.
 
