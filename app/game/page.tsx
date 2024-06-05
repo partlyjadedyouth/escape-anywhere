@@ -15,10 +15,12 @@ export default function Game() {
   const [messages, setMessages] = useState<ChatMessage[]>([]); // messages 상태를 빈 배열로 초기화합니다.
   const [input, setInput] = useState<string>(""); // input 상태를 빈 문자열로 초기화합니다.
   const [activateInput, setActivateInput] = useState<boolean>(false); // activateInput 상태를 false로 초기화합니다.
+  const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태를 추적하는 새로운 상태 변수
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 초기 메시지를 보내는 함수입니다.
     const sendInitialMessage = async () => {
+      setIsLoading(true); // API 요청을 보내기 전에 로딩 상태를 true로 설정
       try {
         const response = await fetch("/api/chat", {
           // /api/chat 엔드포인트로 POST 요청을 보냅니다.
@@ -42,6 +44,8 @@ export default function Game() {
         setMessages([initialBotMessage]); // 초기 봇 메시지를 상태에 설정합니다.
       } catch (error) {
         console.error("Failed to send initial message", error); // 초기 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.
+      } finally {
+        setIsLoading(false); // 응답을 받은 후에 로딩 상태를 false로 설정
       }
     };
 
@@ -61,6 +65,7 @@ export default function Game() {
 
     setMessages((prev) => [...prev, userMessage]); // 이전 메시지 배열에 사용자의 메시지를 추가합니다.
 
+    setIsLoading(true); // API 요청을 보내기 전에 로딩 상태를 true로 설정
     try {
       const response = await fetch("/api/chat", {
         // /api/chat 엔드포인트로 POST 요청을 보냅니다.
@@ -85,6 +90,7 @@ export default function Game() {
     } catch (error) {
       console.error("Failed to send message", error); // 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.
     } finally {
+      setIsLoading(false); // 응답을 받은 후에 로딩 상태를 false로 설정
       setInput(""); // 입력 값을 초기화합니다.
     }
   };
@@ -110,8 +116,8 @@ export default function Game() {
         style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         // 배경색을 반투명한 검은색으로 설정합니다.
       >
-        {messages.length > 0 ? getLastBotMessage()!.message : ""}
-        {/* 메시지가 있는 경우 마지막 봇 메시지를 표시합니다. */}
+        {isLoading ? "로딩 중..." : messages.length > 0 ? getLastBotMessage()!.message : ""}
+        {/* 로딩 중일 때는 "로딩 중..." 텍스트를 표시하고, 그렇지 않을 때는 기존의 메시지를 표시합니다. */}
       </div>
       <div className="w-full flex items-center justify-between mb-4">
         {/* 입력 및 전송 버튼을 포함하는 컨테이너입니다. */}
