@@ -17,6 +17,8 @@ function GameComponent() {
   const [texts, setTexts] = useState<ChatRequest[]>([]); // 텍스트 목록을 상태로 관리합니다.
   const [input, setInput] = useState<string>(""); // input 상태를 빈 문자열로 초기화합니다.
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태를 추적하는 새로운 상태 변수
+  const [isRoomChanged, setIsRoomChanged] = useState<boolean>(false)
+  const [isGameFinished, setIsGameFinished] = useState<boolean>(false)
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 초기 메시지를 보내는 함수입니다.
@@ -67,6 +69,18 @@ function GameComponent() {
   useEffect(() => {
     console.log(texts);
   }, [texts]);
+
+  useEffect(() => {
+    if (isRoomChanged) {
+      //이미지 url 교체
+    }
+  }, [isRoomChanged])
+
+  useEffect(() => {
+    if (isGameFinished) {
+      // 게임 엔딩 페이지로 이동
+    }
+  }, [isGameFinished])
 
   const handleSendMessage = async () => {
     // 사용자가 메시지를 전송할 때 호출되는 함수입니다.
@@ -128,6 +142,13 @@ You must never allow the room to be bypassed or the puzzle to be solved based on
       };
 
       setTexts((prev) => [...prev, botText]); // 이전 텍스트 배열에 봇의 메시지를 추가합니다.
+
+      if (JSON.parse(data.message.trim()).roomChanged) {
+        setIsRoomChanged(true)
+      } else if (JSON.parse(data.message.trim()).gameFinished) {
+        setIsGameFinished(true)
+      }
+
     } catch (error) {
       console.error("Failed to send message", error); // 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.
     } finally {
