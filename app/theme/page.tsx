@@ -3,7 +3,7 @@
 import React, { useState, Suspense, useEffect } from "react"; // React와 useState 훅을 임포트합니다.
 import { useRouter } from "next/navigation"; // Next.js의 useRouter 훅을 임포트합니다.
 import axios from "axios";
-import { systemPrompts } from "../api/chat/route";
+import { systemPrompts } from "@/lib/utils/systemPrompts";
 import { NextResponse } from "next/server";
 
 export default function Theme() {
@@ -12,7 +12,7 @@ export default function Theme() {
   const [theme, setTheme] = useState<string>(""); // theme 상태를 빈 문자열로 초기화합니다.
   const [isThemeSelected, setIsThemeSelected] = useState<boolean>(false); // isThemeSelected 상태를 false로 초기화합니다.
 
-  const [themes, setThemes] = useState()
+  const [themes, setThemes] = useState();
 
   useEffect(() => {
     const initGPT = async () => {
@@ -35,9 +35,8 @@ export default function Theme() {
         );
         const message = response.data.choices[0].message;
 
-        setThemes(message.content)
-        return
-
+        setThemes(message.content);
+        return;
       } catch (error) {
         console.error(error);
         return NextResponse.json(
@@ -45,11 +44,10 @@ export default function Theme() {
           { status: 500 },
         );
       }
-    }
+    };
 
-    initGPT()
-
-  }, [])
+    initGPT();
+  }, []);
 
   const handleThemeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // input 요소의 변경 이벤트를 처리하는 함수입니다.
@@ -73,8 +71,11 @@ export default function Theme() {
     <div
       className="flex flex-col items-center justify-center min-h-screen w-full bg-black text-white bg-center bg-cover"
       // flex 컨테이너로, 세로 방향으로 정렬하고, 가운데 정렬하며, 화면 높이를 가득 채우도록 설정합니다.
-      style={{ backgroundImage: "url('/image/background.png')", backgroundSize: 'cover' }}
-    // 배경 이미지를 설정합니다.
+      style={{
+        backgroundImage: "url('/image/background.png')",
+        backgroundSize: "cover",
+      }}
+      // 배경 이미지를 설정합니다.
     >
       {isThemeSelected === false ? (
         // isThemeSelected가 false인 경우
@@ -87,7 +88,7 @@ export default function Theme() {
             className="w-full h-64 p-4 mb-4 overflow-auto"
             // 메시지 영역의 스타일을 설정합니다.
             style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-          // 배경색을 반투명한 검은색으로 설정합니다.
+            // 배경색을 반투명한 검은색으로 설정합니다.
           >
             {/* 입력 및 전송 버튼을 포함하는 컨테이너입니다. */}
             {/* 챗봇이 제시하는 테마 제시 */}
@@ -104,13 +105,13 @@ export default function Theme() {
               value={theme}
               // input 요소의 값을 theme 상태로 설정합니다.
               onChange={handleThemeChange}
-            // input 요소의 변경 이벤트를 handleThemeChange 함수로 설정합니다.
+              // input 요소의 변경 이벤트를 handleThemeChange 함수로 설정합니다.
             />
             <button
               className="w-40 h-10 bg-transparent hover:underline focus:outline-none"
               // 버튼의 스타일을 설정합니다.
               onClick={handleThemeClick}
-            // 버튼 클릭 이벤트를 처리하는 함수를 설정합니다.
+              // 버튼 클릭 이벤트를 처리하는 함수를 설정합니다.
             >
               다음으로
               {/* 버튼의 텍스트입니다. */}
@@ -134,7 +135,7 @@ export default function Theme() {
             }
             // 버튼 스타일을 설정합니다.
             onClick={() => router.push(`/game`)}
-          // 버튼 클릭 시 game 경로로 이동하도록 설정합니다. userId를 쿼리 매개변수로 포함합니다.
+            // 버튼 클릭 시 game 경로로 이동하도록 설정합니다. userId를 쿼리 매개변수로 포함합니다.
           >
             시작하기
             {/* 버튼의 텍스트입니다. */}
