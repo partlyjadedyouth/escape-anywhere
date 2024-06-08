@@ -104,7 +104,6 @@ export default function Game() {
           backgroundSize: "cover",
         }}
       >
-        {/* 좌측에 이미지를 배치합니다. */}
       </div>
       <div className="w-1/2 h-full flex flex-col items-center justify-end bg-transparent text-white px-4">
         {/* 우측에 메시지를 주고 받는 창을 배치합니다. */}
