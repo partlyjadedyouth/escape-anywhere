@@ -6,8 +6,8 @@ import { systemPrompts } from "@/lib/utils/systemPrompts"; // 시스템 프롬�
 
 function ThemeComponent() {
   const router = useRouter(); // useRouter 훅을 사용하여 router 객체를 생성합니다.
-  const searchParams = useSearchParams();
-  const userId = searchParams.get("userId");
+  const searchParams = useSearchParams(); // useSearchParmas 훅을 사용하여 searchParams 객체를 생성합니다.
+  const userId = searchParams.get("userId"); // userId 쿼리 매개변수를 가져옵니다.
 
   const [theme, setTheme] = useState<string>(""); // theme 상태를 빈 문자열로 초기화합니다.
   const [isThemeSelected, setIsThemeSelected] = useState<boolean>(false); // isThemeSelected 상태를 false로 초기화합니다.
@@ -125,6 +125,7 @@ function ThemeComponent() {
 
 export default function Theme() {
   return (
+    // client-side에서 useSearchParams를 사용하기 위해 Suspense 컴포넌트로 ThemeComponent를 감싸줍니다.
     <Suspense>
       <ThemeComponent />
     </Suspense>
