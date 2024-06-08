@@ -1,4 +1,10 @@
-export const systemPrompts = [
+export interface ChatMessage {
+  // 채팅 메시지의 인터페이스를 정의합니다.
+  role: string; // 메시지 발신자 (사용자 또는 봇)
+  content: string; // 메시지 내용
+}
+
+export const systemPrompts: ChatMessage[] = [
   {
     role: "system",
     content: `BASIC ROLE\n 
@@ -36,6 +42,17 @@ The entire simulation will proceed in Korean.`,
     roomChanged: BOOLEAN, this field must be TRUE ONLY when the user enters new room, and layout of the room is described.\n
     gameFinished: BOOLEAN, whether user has finished the scenario or not,\n
     }\n
-    Now start from theme selection.`,
+    Do not use any markdown or HTML tags.\n
+    `,
+  },
+  {
+    role: "system",
+    content: `
+    Now start from theme selection. Themes must be presented in following format, which is a string representation of an array of strings.
+    
+    [{Theme 1}, {Theme 2}, {Theme 3: string}, ...]\n
+
+    Do not use any markdown or HTML tags.\n
+    `,
   },
 ];

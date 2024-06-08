@@ -1,31 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
-import axios from "axios";
-import { systemPrompts } from "@/lib/utils/systemPrompts";
+import OpenAI from "openai";
+
+const openai = new OpenAI({ apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY }); // OpenAI 객체를 생성하고 API 키를 설정합니다.})
 
 export async function POST(request: NextRequest) {
   const { messages } = await request.json();
-  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 
   try {
-    const response = await axios.post(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        model: "gpt-3.5-turbo",
-        messages: [...systemPrompts, ...messages],
-        max_tokens: 1000,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-      },
-    );
+    const response = await openai.chat.completions.create({
+      messages: [...messages],
+      model: "gpt-4o",
+    });
 
-    const message = response.data.choices[0].message.content;
+    const message = response.choices[0].message.content;
+
     return NextResponse.json({ message });
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return NextResponse.json(
       { message: "Failed to generate message" },
       { status: 500 },
