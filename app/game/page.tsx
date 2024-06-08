@@ -1,8 +1,9 @@
 "use client"; // 이 파일이 클라이언트 측에서 실행됨을 나타냅니다.
 
+
 import { systemPrompts, ChatRequest, ChatResponse } from "@/lib/utils/systemPrompts";
 import { set } from "firebase/database";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react"; // useState와 useEffect 훅을 임포트합니다.
 
 function GameComponent() {
@@ -17,8 +18,15 @@ function GameComponent() {
   const [texts, setTexts] = useState<ChatRequest[]>([]); // 텍스트 목록을 상태로 관리합니다.
   const [input, setInput] = useState<string>(""); // input 상태를 빈 문자열로 초기화합니다.
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태를 추적하는 새로운 상태 변수
+
+  const loadTime = Date.now(); // 페이지 로드 시간 기록
+  const router = useRouter(); // useRouter 훅을 사용하여 router 객체를 생성합니다.
+
+  const userId = searchParams.get("userId"); // 쿼리 매개변수를 가져옵니다.
+
   const [isRoomChanged, setIsRoomChanged] = useState<boolean>(false)
   const [isGameFinished, setIsGameFinished] = useState<boolean>(false)
+
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 초기 메시지를 보내는 함수입니다.
@@ -79,6 +87,11 @@ function GameComponent() {
   useEffect(() => {
     if (isGameFinished) {
       // 게임 엔딩 페이지로 이동
+        const unloadTime = Date.now(); // 페이지 언로드 시간을 기록합니다.
+        const elapsedTime = unloadTime - loadTime; // 소요시간을 계산합니다.
+
+        // 소요시간을 다음 페이지에 전달하고 이동합니다.
+        router.push(`/ending?userId=${userId}&time=${elapsedTime}`);
     }
   }, [isGameFinished])
 
