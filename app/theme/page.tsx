@@ -1,8 +1,8 @@
 "use client"; // 이 파일이 클라이언트 측에서 실행됨을 나타냅니다.
 
-import React, { useState, Suspense, useEffect } from "react"; // React와 useState 훅을 임포트합니다.
+import React, { useState, Suspense, useEffect } from "react"; // React와 필요한 훅들을 임포트합니다.
 import { useRouter } from "next/navigation"; // Next.js의 useRouter 훅을 임포트합니다.
-import { systemPrompts } from "@/lib/utils/systemPrompts";
+import { systemPrompts } from "@/lib/utils/systemPrompts"; // 시스템 프롬프트를 임포트합니다.
 
 export default function Theme() {
   const router = useRouter(); // useRouter 훅을 사용하여 router 객체를 생성합니다.
@@ -10,25 +10,27 @@ export default function Theme() {
   const [theme, setTheme] = useState<string>(""); // theme 상태를 빈 문자열로 초기화합니다.
   const [isThemeSelected, setIsThemeSelected] = useState<boolean>(false); // isThemeSelected 상태를 false로 초기화합니다.
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태를 추적하는 새로운 상태 변수
-  const [themes, setThemes] = useState<string[]>();
+  const [themes, setThemes] = useState<string[]>(); // 테마 목록을 상태로 관리합니다.
 
   useEffect(() => {
+    // 컴포넌트가 마운트될 때 실행되는 useEffect입니다.
     const getResponse = async () => {
       setIsLoading(true); // API 요청을 보내기 전에 로딩 상태를 true로 설정
       try {
         const response = await fetch("/api/chat", {
+          // /api/chat 엔드포인트로 POST 요청을 보냅니다.
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            messages: [...systemPrompts],
+            messages: [...systemPrompts], // 시스템 프롬프트를 메시지로 포함하여 보냅니다.
           }),
         });
 
-        const data = await response.json();
+        const data = await response.json(); // 서버로부터 응답을 JSON 형태로 파싱합니다.
         console.log(data);
-        setThemes(JSON.parse(data.message));
+        setThemes(JSON.parse(data.message)); // 응답 메시지를 JSON 파싱하여 테마 목록으로 설정합니다.
       } catch (error) {
         console.error("Failed to send initial message", error); // 초기 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.
       } finally {
@@ -36,20 +38,8 @@ export default function Theme() {
       }
     };
 
-    getResponse();
-  }, []);
-
-  const handleNextButtonClick = () => {
-    // 버튼 클릭 이벤트를 처리하는 함수입니다.
-    if (theme.length === 0) {
-      // theme이 빈 문자열인 경우
-      alert("컨셉을 선택해주세요"); // 경고 메시지를 표시합니다.
-      return; // 함수 실행을 종료합니다.
-    } else {
-      // console.log(theme); // theme을 콘솔에 출력합니다.
-      setIsThemeSelected(true); // isThemeSelected 상태를 true로 설정합니다.
-    }
-  };
+    getResponse(); // 초기 메시지를 보내는 함수를 호출합니다.
+  }, []); // 빈 배열을 두 번째 인수로 전달하여 컴포넌트가 마운트될 때만 실행되도록 합니다.
 
   return (
     // JSX를 반환합니다.
@@ -80,17 +70,22 @@ export default function Theme() {
             {isLoading ? (
               <p>GPT가 컨셉을 생성하고 있습니다. 잠시만 기다려주세요...</p>
             ) : (
+              // 로딩 중일 때 표시할 메시지입니다.
               <Suspense fallback={<p>Loading...</p>}>
+                {/* Suspense 컴포넌트를 사용하여 비동기 렌더링을 처리합니다. */}
                 {themes?.map((theme) => (
                   <div key={theme} className="mb-2">
+                    {/* 각 테마를 표시할 div입니다. */}
                     <button
                       className="w-full h-10 text-lg bg-transparent hover:underline focus:outline-none"
+                      // 버튼 스타일을 설정합니다.
                       onClick={() => {
-                        setTheme(theme);
-                        handleNextButtonClick();
+                        setTheme(theme); // 선택한 테마를 상태로 설정합니다.
+                        setIsThemeSelected(true); // isThemeSelected 상태를 true로 설정합니다.
                       }}
                     >
                       {theme}
+                      {/* 버튼의 텍스트로 테마를 표시합니다. */}
                     </button>
                   </div>
                 ))}
