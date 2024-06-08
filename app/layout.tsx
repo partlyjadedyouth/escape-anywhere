@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AppProvider } from "@/lib/utils/appContext";
 
 export const metadata: Metadata = {
   title: "Escape Anywhere",
@@ -14,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex justify-center h-screen bg-black text-white font-NanumMyeongjo">
-        {children}
+        <AppProvider>{children}</AppProvider>
       </body>
     </html>
   );
