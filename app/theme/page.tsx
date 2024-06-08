@@ -3,7 +3,7 @@
 import React, { useState, Suspense, useEffect } from "react"; // React와 useState 훅을 임포트합니다.
 import { useRouter } from "next/navigation"; // Next.js의 useRouter 훅을 임포트합니다.
 import axios from "axios";
-import { systemPrompts } from "../api/chat/route";
+import { systemPrompts } from "@/lib/utils/systemPrompts";
 import { NextResponse } from "next/server";
 import { useAppContext } from "@/lib/utils/appContext";
 
@@ -41,7 +41,10 @@ export default function Theme() {
     <div
       className="flex flex-col items-center justify-center min-h-screen w-full bg-black text-white bg-center bg-cover"
       // flex 컨테이너로, 세로 방향으로 정렬하고, 가운데 정렬하며, 화면 높이를 가득 채우도록 설정합니다.
-      style={{ backgroundImage: "url('/image/background.png')", backgroundSize: 'cover' }}
+      style={{
+        backgroundImage: "url('/image/background.png')",
+        backgroundSize: "cover",
+      }}
     // 배경 이미지를 설정합니다.
     >
       {isThemeSelected === false ? (
