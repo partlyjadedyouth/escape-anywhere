@@ -1,5 +1,6 @@
 "use client"; // 이 파일이 클라이언트 측에서 실행됨을 나타냅니다.
 
+import { systemPrompts } from "@/lib/utils/systemPrompts";
 import { useState, useEffect, Suspense } from "react"; // useState와 useEffect 훅을 임포트합니다.
 
 interface ChatMessage {
@@ -28,7 +29,7 @@ export default function Game() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            messages: [], // 초기에는 이전 메시지가 없으므로 빈 배열을 보냅니다.
+            messages: [...systemPrompts],
           }),
         });
 
@@ -103,8 +104,7 @@ export default function Game() {
           backgroundImage: "url('/image/testimage.png')",
           backgroundSize: "cover",
         }}
-      >
-      </div>
+      ></div>
       <div className="w-1/2 h-full flex flex-col items-center justify-end bg-transparent text-white px-4">
         {/* 우측에 메시지를 주고 받는 창을 배치합니다. */}
         <div

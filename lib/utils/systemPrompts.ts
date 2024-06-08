@@ -36,6 +36,17 @@ The entire simulation will proceed in Korean.`,
     roomChanged: BOOLEAN, this field must be TRUE ONLY when the user enters new room, and layout of the room is described.\n
     gameFinished: BOOLEAN, whether user has finished the scenario or not,\n
     }\n
-    Now start from theme selection.`,
+    Do not use any markdown or HTML tags.\n
+    `,
+  },
+  {
+    role: "system",
+    content: `
+    Now start from theme selection. Themes must be presented in following format, which is a string representation of an array of strings.
+    
+    [{Theme 1}, {Theme 2}, {Theme 3: string}, ...]\n
+
+    Do not use any markdown or HTML tags.\n
+    `,
   },
 ];
