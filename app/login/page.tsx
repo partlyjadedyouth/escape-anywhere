@@ -32,7 +32,15 @@ export default function Login() {
 
   return (
     // JSX를 반환합니다.
-    <>
+    <div
+      className="flex flex-col items-center justify-center min-h-screen w-full bg-black text-white bg-center bg-cover"
+      // flex 컨테이너로, 세로 방향으로 정렬하고, 가운데 정렬하며, 화면 높이를 가득 채우도록 설정합니다.
+      style={{
+        backgroundImage: "url('/image/background.png')",
+        backgroundSize: "cover",
+      }}
+      // 배경 이미지를 설정합니다.
+    >
       <div className="flex flex-col items-center justify-center">
         {/* flex 컨테이너로, 세로 방향으로 정렬하고, 가운데 정렬합니다. */}
         <p className="font-bold mb-3 text-xl">
@@ -69,6 +77,6 @@ export default function Login() {
           {/* 버튼의 텍스트입니다. */}
         </button>
       </div>
-    </>
+    </div>
   );
 }

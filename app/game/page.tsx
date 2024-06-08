@@ -14,7 +14,6 @@ export default function Game() {
 
   const [messages, setMessages] = useState<ChatMessage[]>([]); // messages 상태를 빈 배열로 초기화합니다.
   const [input, setInput] = useState<string>(""); // input 상태를 빈 문자열로 초기화합니다.
-  const [activateInput, setActivateInput] = useState<boolean>(false); // activateInput 상태를 false로 초기화합니다.
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태를 추적하는 새로운 상태 변수
 
   useEffect(() => {
