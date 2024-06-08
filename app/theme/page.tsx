@@ -1,6 +1,6 @@
 "use client"; // 이 파일이 클라이언트 측에서 실행됨을 나타냅니다.
 
-import React, { useState, Suspense } from "react"; // React와 useState 훅을 임포트합니다.
+import React, { useState } from "react"; // React와 useState 훅을 임포트합니다.
 import { useRouter } from "next/navigation"; // Next.js의 useRouter 훅을 임포트합니다.
 
 export default function Theme() {
@@ -31,7 +31,10 @@ export default function Theme() {
     <div
       className="flex flex-col items-center justify-center min-h-screen w-full bg-black text-white bg-center bg-cover"
       // flex 컨테이너로, 세로 방향으로 정렬하고, 가운데 정렬하며, 화면 높이를 가득 채우도록 설정합니다.
-      style={{ backgroundImage: "url('/image/background.png')", backgroundSize: 'cover' }}
+      style={{
+        backgroundImage: "url('/image/background.png')",
+        backgroundSize: "cover",
+      }}
       // 배경 이미지를 설정합니다.
     >
       {isThemeSelected === false ? (
@@ -91,7 +94,7 @@ export default function Theme() {
               "w-40 py-2 px-4 bg-transparent hover:underline focus:outline-none"
             }
             // 버튼 스타일을 설정합니다.
-            onClick={() => router.push(`/game`)}
+            onClick={() => router.push(`/game?userId=${router.query.userId}`)}
             // 버튼 클릭 시 game 경로로 이동하도록 설정합니다. userId를 쿼리 매개변수로 포함합니다.
           >
             시작하기
