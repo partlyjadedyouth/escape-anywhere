@@ -1,44 +1,41 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import { db } from "@/firebase";
 import { collection, addDoc } from "firebase/firestore";
 
-interface QueryParams {
-  userId?: string;
-  time?: string;
-}
-
 export default function Ending() {
   const router = useRouter();
-  const query = router.query as QueryParams;
-  const [time, setTime] = useState<number>(0);
+  const searchParams = useSearchParams();
+  const userId = searchParams.get("userId");
+  const time = searchParams.get("time");
 
-  useEffect(() => {
-    if (query.time) {
-      setTime(Number(query.time));
-    }
-  }, [query]);
-
-  // 페이지가 로드될 때 Firebase에 데이터를 저장합니다.
-  useEffect(() => {
-    const saveData = async () => {
-      if (query.userId && query.time) {
-        try {
-          const leaderboardRef = collection(db, "leaderboard");
-          await addDoc(leaderboardRef, {
-            userId: query.userId,
-            time: Number(query.time),
-          });
-        } catch (error) {
-          console.error("Error adding document: ", error);
-        }
+  const handleSave = async () => {
+    if (userId && time) {
+      try {
+        const leaderboardRef = collection(db, "leaderboard");
+        await addDoc(leaderboardRef, {
+          userId: userId,
+          time: Number(time),
+        });
+        router.push(`/leaderboard`);
+      } catch (error) {
+        console.error("Error adding document: ", error);
       }
-    };
+    }
+  };
 
-    saveData();
-  }, [query]);
+  if (!time) {
+    return <div>Invalid time parameter</div>;
+  }
+
+  const formatTime = (milliseconds) => {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}분 ${seconds}초`;
+  };
 
   return (
     <div
@@ -48,17 +45,19 @@ export default function Ending() {
         backgroundSize: "cover",
       }}
     >
-      <h1 className="text-center text-2xl font-bold mb-4">
-        축하합니다, {query.userId}! 게임을 클리어했습니다.
-      </h1>
-      <h1 className="text-center text-2xl font-bold mb-4">
-        클리어 시간: {time}ms
-      </h1>
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold mb-2">탈출에 성공했습니다.</h1>
+        <p className="text-xl mb-4">나의 기록</p>
+        <h2 className="text-6xl font-bold">{formatTime(Number(time))}</h2>
+      </div>
+      <div className="text-center mb-8">
+        <p className="text-2xl">유저 ID: {userId}</p>
+      </div>
       <button
         className={
-          "w-40 py-2 px-4 bg-transparent hover:underline focus:outline-none"
+          "w-40 py-2 px-4 bg-transparent hover:underline focus:outline-none text-xl"
         }
-        onClick={() => router.push(`/leaderboard`)}
+        onClick={handleSave}
       >
         리더보드 확인하기
       </button>
