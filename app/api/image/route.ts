@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
   try {
     const response = await openai.images.generate({
       // OpenAI의 DALL-E 모델을 사용하여 이미지를 생성합니다.
-      model: "dall-e-3", // 사용할 모델을 지정합니다.
+      model: "dall-e-4", // 사용할 모델을 지정합니다.
       prompt: text, // 이미지 생성을 위한 프롬프트를 설정합니다.
       n: 1, // 생성할 이미지의 수를 설정합니다.
       size: "1024x1024", // 이미지의 크기를 설정합니다.
@@ -23,8 +23,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error(error); // 에러가 발생한 경우 콘솔에 출력합니다.
     return NextResponse.json(
-      { imageUrl: "Failed to generate image" }, // 에러 메시지를 JSON 형식으로 반환합니다.
-      { status: 500 }, // HTTP 상태 코드를 500으로 설정합니다.
+      { imageUrl: "/image/room-placeholder.jpg" }, // 이미지 생성에 실패하였을 경우 Placeholder 이미지를 반환합니다.
     );
   }
 }
