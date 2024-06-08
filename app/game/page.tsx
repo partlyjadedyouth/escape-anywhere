@@ -1,10 +1,12 @@
 "use client"; // 이 파일이 클라이언트 측에서 실행됨을 나타냅니다.
 
-
-import { systemPrompts, ChatRequest, ChatResponse } from "@/lib/utils/systemPrompts";
-import { set } from "firebase/database";
+import {
+  systemPrompts,
+  ChatRequest,
+  ChatResponse,
+} from "@/lib/utils/systemPrompts";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect, Suspense } from "react"; // useState와 useEffect 훅을 임포트합니다.
+import { useState, useEffect, useRef, Suspense } from "react"; // useState와 useEffect 훅을 임포트합니다.
 
 function GameComponent() {
   const searchParams = useSearchParams(); // useSearchParmas 훅을 사용하여 searchParams 객체를 생성합니다.
@@ -18,16 +20,24 @@ function GameComponent() {
   const [texts, setTexts] = useState<ChatRequest[]>([]); // 텍스트 목록을 상태로 관리합니다.
   const [input, setInput] = useState<string>(""); // input 상태를 빈 문자열로 초기화합니다.
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태를 추적하는 새로운 상태 변수
-  const [imageURL, setImageURL] = useState<string>("url('/image/testimage.png')")
+  const [imageURL, setImageURL] = useState<string>(
+    "url('/image/testimage.png')"
+  );
 
-  const loadTime = Date.now(); // 페이지 로드 시간 기록
+  const [loadTime, setLoadTime] = useState<number>(0); // loadTime 상태 추가
+  const [elapsedTime, setElapsedTime] = useState<number>(0); // 소요시간 상태 추가
+  const messageEndRef = useRef<HTMLDivElement | null>(null);
+
   const router = useRouter(); // useRouter 훅을 사용하여 router 객체를 생성합니다.
 
   const userId = searchParams.get("userId"); // 쿼리 매개변수를 가져옵니다.
 
-  const [isRoomChanged, setIsRoomChanged] = useState<boolean>(false)
-  const [isGameFinished, setIsGameFinished] = useState<boolean>(false)
+  const [isRoomChanged, setIsRoomChanged] = useState<boolean>(false);
+  const [isGameFinished, setIsGameFinished] = useState<boolean>(false);
 
+  useEffect(() => {
+    setLoadTime(Date.now()); // 컴포넌트가 처음 마운트될 때 loadTime 설정
+  }, []); // 의존성 배열이 빈 배열이므로 이 훅은 컴포넌트가 처음 마운트될 때만 실행됩니다.
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 초기 메시지를 보내는 함수입니다.
@@ -72,29 +82,20 @@ function GameComponent() {
   }, []); // 빈 배열을 두 번째 인수로 전달하여 컴포넌트가 마운트될 때만 실행되도록 합니다.
 
   useEffect(() => {
-    console.log(messages);
-  }, [messages]);
-
-  useEffect(() => {
-    console.log(texts);
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [texts]);
 
   useEffect(() => {
     if (isRoomChanged) {
-      //이미지 url 교체
+      // 이미지 url 교체
     }
-  }, [isRoomChanged])
+  }, [isRoomChanged]);
 
-  useEffect(() => {
-    if (isGameFinished) {
-      // 게임 엔딩 페이지로 이동
-      const unloadTime = Date.now(); // 페이지 언로드 시간을 기록합니다.
-      const elapsedTime = unloadTime - loadTime; // 소요시간을 계산합니다.
-
-      // 소요시간을 다음 페이지에 전달하고 이동합니다.
-      router.push(`/ending?userId=${userId}&time=${elapsedTime}`);
-    }
-  }, [isGameFinished])
+  const handleFinishGame = () => {
+    const unloadTime = Date.now(); // 페이지 언로드 시간을 기록합니다.
+    setElapsedTime(unloadTime - loadTime); // 소요시간을 상태로 설정합니다.
+    setIsGameFinished(true); // 게임 종료 상태 설정
+  };
 
   const handleSendMessage = async () => {
     // 사용자가 메시지를 전송할 때 호출되는 함수입니다.
@@ -158,11 +159,10 @@ You must never allow the room to be bypassed or the puzzle to be solved based on
       setTexts((prev) => [...prev, botText]); // 이전 텍스트 배열에 봇의 메시지를 추가합니다.
 
       if (JSON.parse(data.message.trim()).roomChanged) {
-        setIsRoomChanged(true)
+        setIsRoomChanged(true);
       } else if (JSON.parse(data.message.trim()).gameFinished) {
-        setIsGameFinished(true)
+        handleFinishGame();
       }
-
     } catch (error) {
       console.error("Failed to send message", error); // 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.
     } finally {
@@ -196,10 +196,11 @@ You must never allow the room to be bypassed or the puzzle to be solved based on
               }}
             >
               <div
-                className={`mb-4 p-2 rounded-lg ${text.role === "assistant"
-                  ? "bg-white text-white bg-opacity-20"
-                  : "bg-green-500 text-white bg-opacity-60 mr-10"
-                  }`}
+                className={`mb-4 p-2 rounded-lg ${
+                  text.role === "assistant"
+                    ? "bg-white text-white bg-opacity-20"
+                    : "bg-green-500 text-white bg-opacity-60 mr-10"
+                }`}
                 style={{
                   maxWidth: "80%",
                 }}
@@ -208,30 +209,45 @@ You must never allow the room to be bypassed or the puzzle to be solved based on
               </div>
             </div>
           ))}
+          <div ref={messageEndRef} />
         </div>
-        <div className="w-full flex items-center justify-between mb-4">
-          <input
-            type="text"
-            className={`flex-grow h-10 p-4 bg-white text-black ${isLoading ? "opacity-50" : ""
-              }`}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyUp={(e) => {
-              if (e.key === 'Enter') {
-                handleSendMessage()
-              }
-            }}
-            disabled={isLoading} // 로딩 중일 때 입력 필드를 비활성화합니다.
-          />
+        {isGameFinished ? (
           <button
-            className={`w-40 h-10 bg-transparent hover:underline focus:outline-none ${isLoading ? "opacity-50" : ""
-              }`}
-            onClick={handleSendMessage}
-            disabled={isLoading} // 로딩 중일 때 버튼을 비활성화합니다.
+            className="w-40 py-2 px-4 bg-transparent hover:underline focus:outline-none"
+            onClick={() =>
+              router.push(`/ending?userId=${userId}&time=${elapsedTime}`)
+            }
           >
-            전송
+            다음으로 넘어가기
           </button>
-        </div>
+        ) : (
+          <div className="w-full flex items-center justify-between mb-4">
+            <input
+              type="text"
+              className={`flex-grow h-10 p-4 bg-white text-black ${
+                isLoading ? "opacity-50" : ""
+              }`}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyUp={(e) => {
+                if (e.key === "Enter") {
+                  handleSendMessage();
+                }
+              }}
+              placeholder={isLoading ? "로딩 중..." : ""}
+              disabled={isLoading} // 로딩 중일 때 입력 필드를 비활성화합니다.
+            />
+            <button
+              className={`w-40 h-10 bg-transparent hover:underline focus:outline-none ${
+                isLoading ? "opacity-50" : ""
+              }`}
+              onClick={handleSendMessage}
+              disabled={isLoading} // 로딩 중일 때 버튼을 비활성화합니다.
+            >
+              전송
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
