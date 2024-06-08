@@ -14,7 +14,6 @@ export default function Game() {
 
   const [messages, setMessages] = useState<ChatMessage[]>([]); // messages 상태를 빈 배열로 초기화합니다.
   const [input, setInput] = useState<string>(""); // input 상태를 빈 문자열로 초기화합니다.
-  const [activateInput, setActivateInput] = useState<boolean>(false); // activateInput 상태를 false로 초기화합니다.
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태를 추적하는 새로운 상태 변수
 
   useEffect(() => {
@@ -95,51 +94,67 @@ export default function Game() {
     }
   };
 
-  const getLastBotMessage = () => {
-    // 마지막 봇 메시지를 반환하는 함수입니다.
-    for (let i = messages.length - 1; i >= 0; i--) {
-      // 메시지 배열을 뒤에서부터 순회합니다.
-      if (messages[i].sender === "bot") {
-        // 발신자가 봇인 메시지를 찾습니다.
-        return messages[i]; // 마지막 봇 메시지를 반환합니다.
-      }
-    }
-    return null; // 봇 메시지가 없는 경우 null을 반환합니다.
-  };
-
   return (
-    <div className="flex flex-col items-center justify-end h-screen bg-transparent text-white w-full px-4">
-      {/* 화면을 가득 채우는 flex 컨테이너로, 세로 방향으로 정렬하고, 아래쪽에 배치합니다. */}
+    <div className="flex h-screen w-full">
+      {/* 화면을 가득 채우는 flex 컨테이너 */}
       <div
-        className="w-full h-64 p-4 mb-4 overflow-auto"
-        // 메시지 영역의 스타일을 설정합니다.
-        style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-        // 배경색을 반투명한 검은색으로 설정합니다.
+        className="w-1/2 h-screen bg-center"
+        style={{
+          backgroundImage: "url('/image/testimage.png')",
+          backgroundSize: "cover",
+        }}
       >
-        {isLoading ? "로딩 중..." : messages.length > 0 ? getLastBotMessage()!.message : ""}
-        {/* 로딩 중일 때는 "로딩 중..." 텍스트를 표시하고, 그렇지 않을 때는 기존의 메시지를 표시합니다. */}
       </div>
-      <div className="w-full flex items-center justify-between mb-4">
-        {/* 입력 및 전송 버튼을 포함하는 컨테이너입니다. */}
-        <input
-          type="text"
-          // input 요소의 타입을 텍스트로 설정합니다.
-          className="flex-grow h-10 p-4 bg-white text-black"
-          // CSS 클래스를 설정하여 스타일을 지정합니다.
-          value={input}
-          // input 요소의 값을 input 상태로 설정합니다.
-          onChange={(e) => setInput(e.target.value)}
-          // input 요소의 변경 이벤트를 처리하는 함수를 설정합니다.
-        />
-        <button
-          className="w-40 h-10 bg-transparent hover:underline focus:outline-none"
-          // 버튼의 스타일을 설정합니다.
-          onClick={handleSendMessage}
-          // 버튼 클릭 이벤트를 처리하는 함수를 설정합니다.
+      <div className="w-1/2 h-full flex flex-col items-center justify-end bg-transparent text-white px-4">
+        {/* 우측에 메시지를 주고 받는 창을 배치합니다. */}
+        <div
+          className="w-full mb-4 overflow-auto"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         >
-          전송
-          {/* 버튼의 텍스트입니다. */}
-        </button>
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                justifyContent:
+                  message.sender === "bot" ? "flex-start" : "flex-end",
+              }}
+            >
+              <div
+                className={`mb-4 p-2 rounded-lg ${
+                  message.sender === "bot"
+                    ? "bg-white text-white bg-opacity-20"
+                    : "bg-green-500 text-white bg-opacity-60 mr-10"
+                }`}
+                style={{
+                  maxWidth: "80%",
+                }}
+              >
+                {message.message}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="w-full flex items-center justify-between mb-4">
+          <input
+            type="text"
+            className={`flex-grow h-10 p-4 bg-white text-black ${
+              isLoading ? "opacity-50" : ""
+            }`}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            disabled={isLoading} // 로딩 중일 때 입력 필드를 비활성화합니다.
+          />
+          <button
+            className={`w-40 h-10 bg-transparent hover:underline focus:outline-none ${
+              isLoading ? "opacity-50" : ""
+            }`}
+            onClick={handleSendMessage}
+            disabled={isLoading} // 로딩 중일 때 버튼을 비활성화합니다.
+          >
+            전송
+          </button>
+        </div>
       </div>
     </div>
   );
