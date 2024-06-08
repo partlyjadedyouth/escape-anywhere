@@ -43,9 +43,9 @@ export default function Login() {
     >
       <div className="flex flex-col items-center justify-center">
         {/* flex 컨테이너로, 세로 방향으로 정렬하고, 가운데 정렬합니다. */}
-        <p className="font-bold mb-3 text-xl">
-          {/* 타이틀 텍스트 */}
-          순위 기록을 위해 아이디를 입력해주세요.
+        <p className="font-normal mb-10 text-2xl text-center leading-loose">
+          {/* 타이틀 텍스트로, 가운데 정렬하고, 줄간격을 넓게 설정합니다. */}
+          원하시는 아이디를 설정해주세요. <br /> 만약 탈출에 성공하신다면 해당 아이디로 리더보드에 저장됩니다.
         </p>
         <div>
           {/* input과 버튼을 포함하는 div입니다. */}
@@ -64,16 +64,16 @@ export default function Login() {
           <button
             onClick={generateRandomId}
             // 버튼 클릭 이벤트를 generateRandomId 함수로 설정합니다.
-            className="ml-5 w-30 text-white font-xl border-gray-300 rounded border p-2 hover:underline"
+            className="mt-10 mb-10 ml-5 w-30 text-white font-xl border-gray-300 rounded border p-2 hover:bg-white hover:border-white hover:text-black transition-colors duration-300"
             // CSS 클래스를 설정하여 스타일을 지정합니다.
           >
             랜덤 ID 생성
             {/* 버튼의 텍스트입니다. */}
           </button>
         </div>
-        <button className="mt-10 font-xl hover:underline" onClick={handleClick}>
-          {/* 위쪽에 여백을 주고, 텍스트 크기를 크게 설정하며, 호버 시 밑줄이 생기도록 스타일을 지정한 버튼입니다. */}
-          다음으로
+        <button className="mt-10 rounded py-2 px-4 font-2xl hover:bg-white hover:text-black transition-colors duration-300" onClick={handleClick}>
+          {/* 여백과 패딩을 주고, 텍스트 크기를 크게 설정하며, 호버 시 배경 색은 흰색, 텍스트 색은 검은색으로 바뀌도록 스타일을 지정한 버튼입니다. */}
+          완료
           {/* 버튼의 텍스트입니다. */}
         </button>
       </div>
