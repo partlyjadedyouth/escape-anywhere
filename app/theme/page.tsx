@@ -31,7 +31,6 @@ function ThemeComponent() {
         });
         
         const data = await response.json(); // 서버로부터 응답을 JSON 형태로 파싱합니다.
-        console.log(data);
         setThemes(JSON.parse(data.message)); // 응답 메시지를 JSON 파싱하여 테마 목록으로 설정합니다.
       } catch (error) {
         console.error("Failed to send initial message", error); // 초기 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.

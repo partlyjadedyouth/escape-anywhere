@@ -1,10 +1,23 @@
-export interface ChatMessage {
+export interface ChatRequest {
   // 채팅 메시지의 인터페이스를 정의합니다.
   role: string; // 메시지 발신자 (사용자 또는 봇)
   content: string; // 메시지 내용
 }
 
-export const systemPrompts: ChatMessage[] = [
+export interface ChatResponse {
+  // 채팅 메시지의 인터페이스를 정의합니다.
+  role: string; // 메시지 발신자 (사용자 또는 봇)
+  content: ChatJSON; // 메시지 내용
+}
+
+export interface ChatJSON {
+  // 채팅 메시지의 인터페이스를 정의합니다.
+  text: string; // 메시지 발신자 (사용자 또는 봇)
+  roomChanged: boolean; // 메시지 내용
+  gameFinished: boolean;
+}
+
+export const systemPrompts: ChatRequest[] = [
   {
     role: "system",
     content: `BASIC ROLE\n 
