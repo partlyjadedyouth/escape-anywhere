@@ -18,6 +18,7 @@ function GameComponent() {
   const [texts, setTexts] = useState<ChatRequest[]>([]); // 텍스트 목록을 상태로 관리합니다.
   const [input, setInput] = useState<string>(""); // input 상태를 빈 문자열로 초기화합니다.
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태를 추적하는 새로운 상태 변수
+  const [imageURL, setImageURL] = useState<string>("url('/image/testimage.png')")
 
   const loadTime = Date.now(); // 페이지 로드 시간 기록
   const router = useRouter(); // useRouter 훅을 사용하여 router 객체를 생성합니다.
@@ -87,11 +88,11 @@ function GameComponent() {
   useEffect(() => {
     if (isGameFinished) {
       // 게임 엔딩 페이지로 이동
-        const unloadTime = Date.now(); // 페이지 언로드 시간을 기록합니다.
-        const elapsedTime = unloadTime - loadTime; // 소요시간을 계산합니다.
+      const unloadTime = Date.now(); // 페이지 언로드 시간을 기록합니다.
+      const elapsedTime = unloadTime - loadTime; // 소요시간을 계산합니다.
 
-        // 소요시간을 다음 페이지에 전달하고 이동합니다.
-        router.push(`/ending?userId=${userId}&time=${elapsedTime}`);
+      // 소요시간을 다음 페이지에 전달하고 이동합니다.
+      router.push(`/ending?userId=${userId}&time=${elapsedTime}`);
     }
   }, [isGameFinished])
 
@@ -175,7 +176,7 @@ You must never allow the room to be bypassed or the puzzle to be solved based on
       <div
         className="w-1/2 h-screen bg-center"
         style={{
-          backgroundImage: "url('/image/testimage.png')",
+          backgroundImage: imageURL,
           backgroundSize: "cover",
         }}
       ></div>
@@ -215,6 +216,11 @@ You must never allow the room to be bypassed or the puzzle to be solved based on
               }`}
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onKeyUp={(e) => {
+              if (e.key === 'Enter') {
+                handleSendMessage()
+              }
+            }}
             disabled={isLoading} // 로딩 중일 때 입력 필드를 비활성화합니다.
           />
           <button
