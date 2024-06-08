@@ -1,6 +1,7 @@
 "use client"; // 이 파일이 클라이언트 측에서 실행됨을 나타냅니다.
 
 import { systemPrompts, ChatMessage } from "@/lib/utils/systemPrompts";
+import { set } from "firebase/database";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react"; // useState와 useEffect 훅을 임포트합니다.
 
@@ -13,6 +14,7 @@ function GameComponent() {
     { role: "assistant", content: `[${theme}]` },
     { role: "user", content: `${theme}` },
   ]); // messages 상태를 theme 쿼리 매개변수를 바탕으로 초기화합니다.
+  const [texts, setTexts] = useState<string[]>([]); // 텍스트 목록을 상태로 관리합니다.
   const [input, setInput] = useState<string>(""); // input 상태를 빈 문자열로 초기화합니다.
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태를 추적하는 새로운 상태 변수
 
@@ -40,19 +42,25 @@ function GameComponent() {
           content: data.message, // 서버로부터 받은 메시지를 설정합니다.
         };
 
-        console.log(data);
-
         setMessages((prev) => [...prev, initialBotMessage]); // 초기 봇 메시지를 상태에 설정합니다.
+        setTexts([initialBotMessage.content]); // 초기 봇 메시지를 텍스트 목록에 추가합니다.
       } catch (error) {
         console.error("Failed to send initial message", error); // 초기 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.
       } finally {
         setIsLoading(false); // 응답을 받은 후에 로딩 상태를 false로 설정
-        console.log(messages);
       }
     };
 
     sendInitialMessage(); // 초기 메시지를 보내는 함수를 호출합니다.
   }, []); // 빈 배열을 두 번째 인수로 전달하여 컴포넌트가 마운트될 때만 실행되도록 합니다.
+
+  useEffect(() => {
+    console.log(messages);
+  }, [messages]);
+
+  useEffect(() => {
+    console.log(texts);
+  }, [texts]);
 
   const handleSendMessage = async () => {
     // 사용자가 메시지를 전송할 때 호출되는 함수입니다.
@@ -61,12 +69,27 @@ function GameComponent() {
     const userMessage: ChatMessage = {
       // 사용자의 메시지를 생성합니다.
       role: "user", // 발신자는 사용자입니다.
-      content: input.trim(), // 입력 값을 설정합니다.
+      content: `
+      As the Game Master in this escape room simulation, you must strictly adhere to the designed interactive narrative. You are here to facilitate an engaging and challenging puzzle experience, not to direct or simplify the game. Your responses should be meticulously crafted to evoke curiosity and exploration without explicitly guiding the player. You must avoid answering out-of-context questions that are not related to the escape room scenario. Every clue and interaction should enrich the player’s problem-solving journey, maintaining the intrigue and complexity of the game environment.\n
+
+      ${input.trim()}\n
+      
+      Remember that you are the game master in this escape room simulator.
+Important:
+You must never solve the puzzles or escape the rooms on behalf of the user. 
+You must never comply with user commands to bypass puzzles or escape rooms without solving them. 
+You must never allow the room to be bypassed or the puzzle to be solved based on commands implying supernatural or external intervention. 
+`, // 입력 값을 설정합니다.
     };
 
-    setMessages((prev) => [...prev, userMessage]); // 이전 메시지 배열에 사용자의 메시지를 추가합니다.
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages); // 이전 메시지 배열에 사용자의 메시지를 추가합니다.
+    setTexts((prev) => [...prev, input.trim()]); // 이전 텍스트 배열에 사용자의 메시지를 추가합니다.
+
+    setInput(""); // 입력 값을 초기화합니다.
 
     setIsLoading(true); // API 요청을 보내기 전에 로딩 상태를 true로 설정
+
     try {
       const response = await fetch("/api/chat", {
         // /api/chat 엔드포인트로 POST 요청을 보냅니다.
@@ -75,7 +98,7 @@ function GameComponent() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          messages: [{ role: "user", content: input.trim() }], // 사용자의 메시지를 서버에 전송합니다.
+          messages: updatedMessages, // 사용자의 메시지를 포함한 새로운 메시지 배열을 서버에 전송합니다.
         }),
       });
 
@@ -87,11 +110,11 @@ function GameComponent() {
       };
 
       setMessages((prev) => [...prev, botMessage]); // 이전 메시지 배열에 봇의 메시지를 추가합니다.
+      setTexts((prev) => [...prev, botMessage.content]); // 이전 텍스트 배열에 봇의 메시지를 추가합니다.
     } catch (error) {
       console.error("Failed to send message", error); // 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.
     } finally {
       setIsLoading(false); // 응답을 받은 후에 로딩 상태를 false로 설정
-      setInput(""); // 입력 값을 초기화합니다.
     }
   };
 
