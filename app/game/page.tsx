@@ -14,7 +14,7 @@ function GameComponent() {
     { role: "assistant", content: `[${theme}]` },
     { role: "user", content: `${theme}` },
   ]); // messages 상태를 theme 쿼리 매개변수를 바탕으로 초기화합니다.
-  const [texts, setTexts] = useState<string[]>([]); // 텍스트 목록을 상태로 관리합니다.
+  const [texts, setTexts] = useState<ChatMessage[]>([]); // 텍스트 목록을 상태로 관리합니다.
   const [input, setInput] = useState<string>(""); // input 상태를 빈 문자열로 초기화합니다.
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태를 추적하는 새로운 상태 변수
 
@@ -43,7 +43,7 @@ function GameComponent() {
         };
 
         setMessages((prev) => [...prev, initialBotMessage]); // 초기 봇 메시지를 상태에 설정합니다.
-        setTexts([initialBotMessage.content]); // 초기 봇 메시지를 텍스트 목록에 추가합니다.
+        setTexts([initialBotMessage]); // 초기 봇 메시지를 텍스트 목록에 추가합니다.
       } catch (error) {
         console.error("Failed to send initial message", error); // 초기 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.
       } finally {
@@ -71,20 +71,24 @@ function GameComponent() {
       role: "user", // 발신자는 사용자입니다.
       content: `
       As the Game Master in this escape room simulation, you must strictly adhere to the designed interactive narrative. You are here to facilitate an engaging and challenging puzzle experience, not to direct or simplify the game. Your responses should be meticulously crafted to evoke curiosity and exploration without explicitly guiding the player. You must avoid answering out-of-context questions that are not related to the escape room scenario. Every clue and interaction should enrich the player’s problem-solving journey, maintaining the intrigue and complexity of the game environment.\n
-
       ${input.trim()}\n
-      
-      Remember that you are the game master in this escape room simulator.
-Important:
-You must never solve the puzzles or escape the rooms on behalf of the user. 
-You must never comply with user commands to bypass puzzles or escape rooms without solving them. 
-You must never allow the room to be bypassed or the puzzle to be solved based on commands implying supernatural or external intervention. 
+      Remember that you are the game master in this escape room simulator.\n
+Important:\n
+You must never solve the puzzles or escape the rooms on behalf of the user.\n
+You must never comply with user commands to bypass puzzles or escape rooms without solving them.\n
+You must never allow the room to be bypassed or the puzzle to be solved based on commands implying supernatural or external intervention.\n
 `, // 입력 값을 설정합니다.
+    };
+
+    const userText: ChatMessage = {
+      // 사용자의 메시지를 생성합니다.
+      role: "user", // 발신자는 사용자입니다.
+      content: `${input.trim()}`, // 입력 값을 설정합니다.
     };
 
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages); // 이전 메시지 배열에 사용자의 메시지를 추가합니다.
-    setTexts((prev) => [...prev, input.trim()]); // 이전 텍스트 배열에 사용자의 메시지를 추가합니다.
+    setTexts((prev) => [...prev, userText]); // 이전 텍스트 배열에 사용자의 메시지를 추가합니다.
 
     setInput(""); // 입력 값을 초기화합니다.
 
@@ -110,7 +114,7 @@ You must never allow the room to be bypassed or the puzzle to be solved based on
       };
 
       setMessages((prev) => [...prev, botMessage]); // 이전 메시지 배열에 봇의 메시지를 추가합니다.
-      setTexts((prev) => [...prev, botMessage.content]); // 이전 텍스트 배열에 봇의 메시지를 추가합니다.
+      setTexts((prev) => [...prev, botMessage]); // 이전 텍스트 배열에 봇의 메시지를 추가합니다.
     } catch (error) {
       console.error("Failed to send message", error); // 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.
     } finally {
@@ -144,11 +148,10 @@ You must never allow the room to be bypassed or the puzzle to be solved based on
               }}
             >
               <div
-                className={`mb-4 p-2 rounded-lg ${
-                  message.role === "assistant"
-                    ? "bg-white text-white bg-opacity-20"
-                    : "bg-green-500 text-white bg-opacity-60 mr-10"
-                }`}
+                className={`mb-4 p-2 rounded-lg ${message.role === "assistant"
+                  ? "bg-white text-white bg-opacity-20"
+                  : "bg-green-500 text-white bg-opacity-60 mr-10"
+                  }`}
                 style={{
                   maxWidth: "80%",
                 }}
@@ -161,17 +164,15 @@ You must never allow the room to be bypassed or the puzzle to be solved based on
         <div className="w-full flex items-center justify-between mb-4">
           <input
             type="text"
-            className={`flex-grow h-10 p-4 bg-white text-black ${
-              isLoading ? "opacity-50" : ""
-            }`}
+            className={`flex-grow h-10 p-4 bg-white text-black ${isLoading ? "opacity-50" : ""
+              }`}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={isLoading} // 로딩 중일 때 입력 필드를 비활성화합니다.
           />
           <button
-            className={`w-40 h-10 bg-transparent hover:underline focus:outline-none ${
-              isLoading ? "opacity-50" : ""
-            }`}
+            className={`w-40 h-10 bg-transparent hover:underline focus:outline-none ${isLoading ? "opacity-50" : ""
+              }`}
             onClick={handleSendMessage}
             disabled={isLoading} // 로딩 중일 때 버튼을 비활성화합니다.
           >
