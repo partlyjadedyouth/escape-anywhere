@@ -1,19 +1,18 @@
 "use client"; // 이 파일이 클라이언트 측에서 실행됨을 나타냅니다.
 
-import { systemPrompts } from "@/lib/utils/systemPrompts";
+import { systemPrompts, ChatMessage } from "@/lib/utils/systemPrompts";
+import { useSearchParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react"; // useState와 useEffect 훅을 임포트합니다.
 
-interface ChatMessage {
-  // 채팅 메시지의 인터페이스를 정의합니다.
-  sender: string; // 메시지 발신자 (사용자 또는 봇)
-  message: string; // 메시지 내용
-  timestamp: Date; // 메시지 타임스탬프
-}
+function GameComponent() {
+  const searchParams = useSearchParams(); // useSearchParmas 훅을 사용하여 searchParams 객체를 생성합니다.
+  const theme = searchParams.get("theme"); // theme 쿼리 매개변수를 가져옵니다.
 
-export default function Game() {
-  // Game 컴포넌트를 기본으로 내보냅니다.
-
-  const [messages, setMessages] = useState<ChatMessage[]>([]); // messages 상태를 빈 배열로 초기화합니다.
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    ...systemPrompts,
+    { role: "assistant", content: `[${theme}]` },
+    { role: "user", content: `${theme}` },
+  ]); // messages 상태를 theme 쿼리 매개변수를 바탕으로 초기화합니다.
   const [input, setInput] = useState<string>(""); // input 상태를 빈 문자열로 초기화합니다.
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태를 추적하는 새로운 상태 변수
 
@@ -21,6 +20,7 @@ export default function Game() {
     // 컴포넌트가 마운트될 때 초기 메시지를 보내는 함수입니다.
     const sendInitialMessage = async () => {
       setIsLoading(true); // API 요청을 보내기 전에 로딩 상태를 true로 설정
+
       try {
         const response = await fetch("/api/chat", {
           // /api/chat 엔드포인트로 POST 요청을 보냅니다.
@@ -29,23 +29,25 @@ export default function Game() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            messages: [...systemPrompts],
+            messages: messages,
           }),
         });
 
         const data = await response.json(); // 서버로부터 응답을 JSON 형태로 파싱합니다.
         const initialBotMessage: ChatMessage = {
           // 초기 봇 메시지를 생성합니다.
-          sender: "bot", // 발신자는 봇입니다.
-          message: data.message, // 서버로부터 받은 메시지를 설정합니다.
-          timestamp: new Date(), // 현재 시간을 타임스탬프로 설정합니다.
+          role: "assistant", // 발신자는 어시스턴트입니다.
+          content: data.message, // 서버로부터 받은 메시지를 설정합니다.
         };
 
-        setMessages([initialBotMessage]); // 초기 봇 메시지를 상태에 설정합니다.
+        console.log(data);
+
+        setMessages((prev) => [...prev, initialBotMessage]); // 초기 봇 메시지를 상태에 설정합니다.
       } catch (error) {
         console.error("Failed to send initial message", error); // 초기 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.
       } finally {
         setIsLoading(false); // 응답을 받은 후에 로딩 상태를 false로 설정
+        console.log(messages);
       }
     };
 
@@ -58,9 +60,8 @@ export default function Game() {
 
     const userMessage: ChatMessage = {
       // 사용자의 메시지를 생성합니다.
-      sender: "user", // 발신자는 사용자입니다.
-      message: input.trim(), // 입력 값을 설정합니다.
-      timestamp: new Date(), // 현재 시간을 타임스탬프로 설정합니다.
+      role: "user", // 발신자는 사용자입니다.
+      content: input.trim(), // 입력 값을 설정합니다.
     };
 
     setMessages((prev) => [...prev, userMessage]); // 이전 메시지 배열에 사용자의 메시지를 추가합니다.
@@ -81,9 +82,8 @@ export default function Game() {
       const data = await response.json(); // 서버로부터 응답을 JSON 형태로 파싱합니다.
       const botMessage: ChatMessage = {
         // 봇의 응답 메시지를 생성합니다.
-        sender: "bot", // 발신자는 봇입니다.
-        message: data.message, // 서버로부터 받은 메시지를 설정합니다.
-        timestamp: new Date(), // 현재 시간을 타임스탬프로 설정합니다.
+        role: "assistant", // 발신자는 봇입니다.
+        content: data.message, // 서버로부터 받은 메시지를 설정합니다.
       };
 
       setMessages((prev) => [...prev, botMessage]); // 이전 메시지 배열에 봇의 메시지를 추가합니다.
@@ -117,12 +117,12 @@ export default function Game() {
               style={{
                 display: "flex",
                 justifyContent:
-                  message.sender === "bot" ? "flex-start" : "flex-end",
+                  message.role === "assistant" ? "flex-start" : "flex-end",
               }}
             >
               <div
                 className={`mb-4 p-2 rounded-lg ${
-                  message.sender === "bot"
+                  message.role === "assistant"
                     ? "bg-white text-white bg-opacity-20"
                     : "bg-green-500 text-white bg-opacity-60 mr-10"
                 }`}
@@ -130,7 +130,7 @@ export default function Game() {
                   maxWidth: "80%",
                 }}
               >
-                {message.message}
+                {message.content}
               </div>
             </div>
           ))}
@@ -157,5 +157,13 @@ export default function Game() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Game() {
+  return (
+    <Suspense>
+      <GameComponent />
+    </Suspense>
   );
 }

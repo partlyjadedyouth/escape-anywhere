@@ -9,7 +9,7 @@ function ThemeComponent() {
   const searchParams = useSearchParams(); // useSearchParmas 훅을 사용하여 searchParams 객체를 생성합니다.
   const userId = searchParams.get("userId"); // userId 쿼리 매개변수를 가져옵니다.
 
-  const [theme, setTheme] = useState<string>(""); // theme 상태를 빈 문자열로 초기화합니다.
+  const [selectedTheme, setSelectedTheme] = useState<string>(""); // theme 상태를 빈 문자열로 초기화합니다.
   const [isThemeSelected, setIsThemeSelected] = useState<boolean>(false); // isThemeSelected 상태를 false로 초기화합니다.
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태를 추적하는 새로운 상태 변수
   const [themes, setThemes] = useState<string[]>(); // 테마 목록을 상태로 관리합니다.
@@ -82,7 +82,7 @@ function ThemeComponent() {
                       className="w-full h-10 text-lg bg-transparent hover:underline focus:outline-none"
                       // 버튼 스타일을 설정합니다.
                       onClick={() => {
-                        setTheme(theme); // 선택한 테마를 상태로 설정합니다.
+                        setSelectedTheme(theme); // 선택한 테마를 상태로 설정합니다.
                         setIsThemeSelected(true); // isThemeSelected 상태를 true로 설정합니다.
                       }}
                     >
@@ -111,7 +111,9 @@ function ThemeComponent() {
               "w-40 py-2 px-4 bg-transparent hover:underline focus:outline-none"
             }
             // 버튼 스타일을 설정합니다.
-            onClick={() => router.push(`/game?userId=${userId}?theme=${theme}`)}
+            onClick={() =>
+              router.push(`/game?userId=${userId}&theme=${selectedTheme}`)
+            }
             // 버튼 클릭 시 game 경로로 이동하도록 설정합니다. userId를 쿼리 매개변수로 포함합니다.
           >
             시작하기

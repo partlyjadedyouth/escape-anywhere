@@ -1,4 +1,10 @@
-export const systemPrompts = [
+export interface ChatMessage {
+  // 채팅 메시지의 인터페이스를 정의합니다.
+  role: string; // 메시지 발신자 (사용자 또는 봇)
+  content: string; // 메시지 내용
+}
+
+export const systemPrompts: ChatMessage[] = [
   {
     role: "system",
     content: `BASIC ROLE\n 
