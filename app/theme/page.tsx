@@ -76,9 +76,6 @@ export default function Theme() {
       style={{ backgroundImage: "url('/image/background.png')" }}
     // 배경 이미지를 설정합니다.
     >
-      <div>
-        {themes}
-      </div>
       {isThemeSelected === false ? (
         // isThemeSelected가 false인 경우
         <>
