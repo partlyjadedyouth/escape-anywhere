@@ -43,10 +43,6 @@ function ThemeComponent() {
     getResponse(); // 초기 메시지를 보내는 함수를 호출합니다.
   }, []); // 빈 배열을 두 번째 인수로 전달하여 컴포넌트가 마운트될 때만 실행되도록 합니다.
 
-  useEffect(() => {
-    console.log(state)
-  }, [])
-
   return (
     // JSX를 반환합니다.
     <div
@@ -56,7 +52,7 @@ function ThemeComponent() {
         backgroundImage: "url('/image/background.png')",
         backgroundSize: "cover",
       }}
-    // 배경 이미지를 설정합니다.
+      // 배경 이미지를 설정합니다.
     >
       {isThemeSelected === false ? (
         // isThemeSelected가 false인 경우
@@ -69,7 +65,7 @@ function ThemeComponent() {
             className="w-full h-64 p-4 mb-4 flex flex-col items-center justify-center"
             // 메시지 영역의 스타일을 설정합니다.
             style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-          // 배경색을 반투명한 검은색으로 설정합니다.
+            // 배경색을 반투명한 검은색으로 설정합니다.
           >
             {/* 입력 및 전송 버튼을 포함하는 컨테이너입니다. */}
             {/* 챗봇이 제시하는 테마 제시 */}
