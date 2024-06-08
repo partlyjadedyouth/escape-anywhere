@@ -5,51 +5,15 @@ import { useRouter } from "next/navigation"; // Next.js의 useRouter 훅을 임�
 import axios from "axios";
 import { systemPrompts } from "../api/chat/route";
 import { NextResponse } from "next/server";
+import { useAppContext } from "@/lib/utils/appContext";
 
 export default function Theme() {
   const router = useRouter(); // useRouter 훅을 사용하여 router 객체를 생성합니다.
 
+  const { state, setState } = useAppContext()
+
   const [theme, setTheme] = useState<string>(""); // theme 상태를 빈 문자열로 초기화합니다.
   const [isThemeSelected, setIsThemeSelected] = useState<boolean>(false); // isThemeSelected 상태를 false로 초기화합니다.
-
-  const [themes, setThemes] = useState()
-
-  useEffect(() => {
-    const initGPT = async () => {
-      const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
-
-      try {
-        const response = await axios.post(
-          "https://api.openai.com/v1/chat/completions",
-          {
-            model: "gpt-3.5-turbo",
-            messages: systemPrompts,
-            max_tokens: 1000,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${apiKey}`,
-            },
-          },
-        );
-        const message = response.data.choices[0].message;
-
-        setThemes(message.content)
-        return
-
-      } catch (error) {
-        console.error(error);
-        return NextResponse.json(
-          { message: "Failed to generate message" },
-          { status: 500 },
-        );
-      }
-    }
-
-    initGPT()
-
-  }, [])
 
   const handleThemeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // input 요소의 변경 이벤트를 처리하는 함수입니다.
@@ -67,6 +31,10 @@ export default function Theme() {
       setIsThemeSelected(true); // isThemeSelected 상태를 true로 설정합니다.
     }
   };
+
+  useEffect(() => {
+    console.log(state)
+  }, [])
 
   return (
     // JSX를 반환합니다.
