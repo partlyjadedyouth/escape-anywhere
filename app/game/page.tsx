@@ -15,10 +15,12 @@ export default function Game() {
   const [messages, setMessages] = useState<ChatMessage[]>([]); // messages 상태를 빈 배열로 초기화합니다.
   const [input, setInput] = useState<string>(""); // input 상태를 빈 문자열로 초기화합니다.
   const [activateInput, setActivateInput] = useState<boolean>(false); // activateInput 상태를 false로 초기화합니다.
+  const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태를 추적하는 새로운 상태 변수
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 초기 메시지를 보내는 함수입니다.
     const sendInitialMessage = async () => {
+      setIsLoading(true); // API 요청을 보내기 전에 로딩 상태를 true로 설정
       try {
         const response = await fetch("/api/chat", {
           // /api/chat 엔드포인트로 POST 요청을 보냅니다.
@@ -42,6 +44,8 @@ export default function Game() {
         setMessages([initialBotMessage]); // 초기 봇 메시지를 상태에 설정합니다.
       } catch (error) {
         console.error("Failed to send initial message", error); // 초기 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.
+      } finally {
+        setIsLoading(false); // 응답을 받은 후에 로딩 상태를 false로 설정
       }
     };
 
@@ -61,6 +65,7 @@ export default function Game() {
 
     setMessages((prev) => [...prev, userMessage]); // 이전 메시지 배열에 사용자의 메시지를 추가합니다.
 
+    setIsLoading(true); // API 요청을 보내기 전에 로딩 상태를 true로 설정
     try {
       const response = await fetch("/api/chat", {
         // /api/chat 엔드포인트로 POST 요청을 보냅니다.
@@ -85,6 +90,7 @@ export default function Game() {
     } catch (error) {
       console.error("Failed to send message", error); // 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.
     } finally {
+      setIsLoading(false); // 응답을 받은 후에 로딩 상태를 false로 설정
       setInput(""); // 입력 값을 초기화합니다.
     }
   };
@@ -108,27 +114,45 @@ export default function Game() {
           style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         >
           {messages.map((message, index) => (
-            <p
+            <div
               key={index}
-              className={`mb-4 ${
-                message.sender === "bot" ? "text-green-500" : "text-white"
-              }`}
+              style={{
+                display: "flex",
+                justifyContent:
+                  message.sender === "bot" ? "flex-start" : "flex-end",
+              }}
             >
-              {message.sender === "bot" ? "Bot: " : "User: "}
-              {message.message}
-            </p>
+              <div
+                className={`mb-4 p-2 rounded-lg ${
+                  message.sender === "bot"
+                    ? "bg-white text-white bg-opacity-20"
+                    : "bg-green-500 text-white bg-opacity-60 mr-10"
+                }`}
+                style={{
+                  maxWidth: "80%",
+                }}
+              >
+                {message.message}
+              </div>
+            </div>
           ))}
         </div>
         <div className="w-full flex items-center justify-between mb-4">
           <input
             type="text"
-            className="flex-grow h-10 p-4 bg-white text-black"
+            className={`flex-grow h-10 p-4 bg-white text-black ${
+              isLoading ? "opacity-50" : ""
+            }`}
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            disabled={isLoading} // 로딩 중일 때 입력 필드를 비활성화합니다.
           />
           <button
-            className="w-40 h-10 bg-transparent hover:underline focus:outline-none"
+            className={`w-40 h-10 bg-transparent hover:underline focus:outline-none ${
+              isLoading ? "opacity-50" : ""
+            }`}
             onClick={handleSendMessage}
+            disabled={isLoading} // 로딩 중일 때 버튼을 비활성화합니다.
           >
             전송
           </button>
