@@ -56,24 +56,32 @@ function LeaderboardComponent() {
         backgroundSize: "cover",
       }}
     >
-      <div className="bg-white bg-opacity-50 rounded-lg p-6 w-full max-w-3xl mx-4">
-        <h1 className="text-center text-4xl font-bold mb-6">LEADERBOARD</h1>
-        <table className="min-w-full bg-white bg-opacity-75 rounded-lg shadow-lg">
+      <div
+        className="rounded-lg p-12 w-full max-w-3xl mx-4"
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.3)",
+          backdropFilter: "blur(6px)",
+          borderRadius: "20px",
+          boxShadow: "0 0 50px rgba(180, 180, 180, 0.3)",
+        }}
+      >
+        <h1 className="text-center text-3xl font-medium mb-8 text-white">LEADERBOARD</h1>
+        <table className="min-w-full text-white bg-white bg-opacity-15 rounded-lg shadow-lg"
+        style={{
+          backdropFilter: "blur(48px)"
+        }}
+        >
           <thead>
             <tr>
-              <th className="py-2 px-4 border-b">ID</th>
-              <th className="py-2 px-4 border-b">TIME</th>
+              <th className="py-2 px-4 bg-white bg-opacity-15 border-b">ID</th>
+              <th className="py-2 px-4 bg-white bg-opacity-15 border-b">TIME</th>
             </tr>
           </thead>
           <tbody>
             {data.map((entry, index) => (
-              <tr key={index} className="hover:bg-gray-200">
-                <td className="py-2 px-4 border-b text-center">
-                  {entry.userId}
-                </td>
-                <td className="py-2 px-4 border-b text-center">
-                  {formatTime(entry.time)}
-                </td>
+              <tr key={index} className="hover:bg-white hover:text-black">
+                <td className="py-2 px-4 border-b border-gray-200 border-opacity-30 text-center">{entry.userId}</td>
+                <td className="py-2 px-4 border-b border-gray-200 border-opacity-30 text-center">{formatTime(entry.time)}</td>
               </tr>
             ))}
           </tbody>
