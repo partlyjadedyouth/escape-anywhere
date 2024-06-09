@@ -51,7 +51,7 @@ function ThemeComponent() {
         backgroundImage: "url('/image/background.png')",
         backgroundSize: "cover",
       }}
-    // 배경 이미지를 설정합니다.
+      // 배경 이미지를 설정합니다.
     >
       {isThemeSelected === false ? (
         // isThemeSelected가 false인 경우
@@ -64,7 +64,7 @@ function ThemeComponent() {
             className="w-full h-64 p-4 my-8 flex flex-col items-center justify-center"
             // 메시지 영역의 스타일을 설정합니다.
             style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-          // 배경색을 반투명한 검은색으로 설정합니다.
+            // 배경색을 반투명한 검은색으로 설정합니다.
           >
             {/* 입력 및 전송 버튼을 포함하는 컨테이너입니다. */}
             {/* 챗봇이 제시하는 테마 제시 */}
@@ -113,7 +113,7 @@ function ThemeComponent() {
             onClick={() =>
               router.push(`/game?userId=${userId}&theme=${selectedTheme}`)
             }
-          // 버튼 클릭 시 game 경로로 이동하도록 설정합니다. userId를 쿼리 매개변수로 포함합니다.
+            // 버튼 클릭 시 game 경로로 이동하도록 설정합니다. userId를 쿼리 매개변수로 포함합니다.
           >
             시작하기
             {/* 버튼의 텍스트입니다. */}
