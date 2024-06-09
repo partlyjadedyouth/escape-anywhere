@@ -1,30 +1,13 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { db } from "@/firebase";
-import { collection, addDoc } from "firebase/firestore";
 
 function EndingComponent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const userId = searchParams.get("userId");
   const time = searchParams.get("time");
-
-  const handleSave = async () => {
-    if (userId && time) {
-      try {
-        const leaderboardRef = collection(db, "leaderboard");
-        await addDoc(leaderboardRef, {
-          userId: userId,
-          time: Number(time),
-        });
-        router.push(`/leaderboard`);
-      } catch (error) {
-        console.error("Error adding document: ", error);
-      }
-    }
-  };
 
   if (!time) {
     return <div>Invalid time parameter</div>;
@@ -57,7 +40,7 @@ function EndingComponent() {
         className={
           "w-40 py-2 px-4 bg-transparent hover:underline focus:outline-none text-xl"
         }
-        onClick={handleSave}
+        onClick={() => router.push(`/leaderboard?userId=${userId}`)}
       >
         리더보드 확인
       </button>

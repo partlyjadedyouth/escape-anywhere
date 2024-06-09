@@ -1,10 +1,14 @@
 "use client";
 
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { db } from "@/firebase";
 import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
 
 export default function Leaderboard() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const userId = searchParams.get("userId");
   const [data, setData] = useState<Array<{
     userId: string;
     time: number;
@@ -32,6 +36,13 @@ export default function Leaderboard() {
 
     fetchData();
   }, []);
+
+  const formatTime = (milliseconds: number) => {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}분 ${seconds}초`;
+  };
 
   if (data === null) {
     return <div>Loading...</div>;
@@ -61,7 +72,7 @@ export default function Leaderboard() {
                   {entry.userId}
                 </td>
                 <td className="py-2 px-4 border-b text-center">
-                  {entry.time} seconds
+                  {formatTime(entry.time)}
                 </td>
               </tr>
             ))}
@@ -71,13 +82,13 @@ export default function Leaderboard() {
       <div className="flex mt-6 space-x-4">
         <button
           className="w-40 py-2 px-4 bg-transparent text-white border border-white rounded hover:bg-white hover:text-black focus:outline-none"
-          // onClick={() => }
+          onClick={() => router.push(`/theme?userId=${userId}`)}
         >
           다시 시작하기
         </button>
         <button
           className="w-40 py-2 px-4 bg-transparent text-white border border-white rounded hover:bg-white hover:text-black focus:outline-none"
-          // onClick={() => }
+          onClick={() => router.push(`/`)}
         >
           종료하기
         </button>
