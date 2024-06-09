@@ -9,8 +9,8 @@ export async function POST(request: NextRequest) {
   try {
     const response = await openai.chat.completions.create({
       messages: [...messages],
-      // model: "gpt-4o",
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o",
+      // model: "gpt-3.5-turbo",
     });
 
     const message = response.choices[0].message.content;
