@@ -1,11 +1,11 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { db } from "@/firebase";
 import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
 
-export default function Leaderboard() {
+function LeaderboardComponent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const userId = searchParams.get("userId");
@@ -21,7 +21,7 @@ export default function Leaderboard() {
         const leaderboardQuery = query(
           leaderboardRef,
           orderBy("time", "asc"),
-          limit(10)
+          limit(10),
         );
         const snapshot = await getDocs(leaderboardQuery);
         const leaderboardData = snapshot.docs.map((doc) => ({
@@ -94,5 +94,13 @@ export default function Leaderboard() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function Leaderboard() {
+  return (
+    <Suspense>
+      <LeaderboardComponent />
+    </Suspense>
   );
 }
