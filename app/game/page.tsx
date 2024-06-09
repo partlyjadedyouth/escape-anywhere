@@ -6,9 +6,11 @@ import {
   ChatRequest,
   ChatResponse,
 } from "@/lib/utils/systemPrompts";
-import { set } from "firebase/database";
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, useRef, Suspense } from "react"; // useState와 useEffect 훅을 임포트합니다.
+import { db } from "@/firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 function GameComponent() {
   const searchParams = useSearchParams(); // useSearchParmas 훅을 사용하여 searchParams 객체를 생성합니다.
@@ -23,6 +25,7 @@ function GameComponent() {
   const [input, setInput] = useState<string>(""); // input 상태를 빈 문자열로 초기화합니다.
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태를 추적하는 새로운 상태 변수
   const [imageURL, setImageURL] = useState<string>("/image/testimage.png");
+
   const [isImageLoading, setIsImageLoading] = useState<boolean>(true); // 이미지 로딩 상태를 추적하는 새로운 상태 변수
 
   const [loadTime, setLoadTime] = useState<number>(0); // loadTime 상태 추가
@@ -95,10 +98,23 @@ function GameComponent() {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [texts]);
 
-  const handleFinishGame = () => {
-    const unloadTime = Date.now(); // 페이지 언로드 시간을 기록합니다.
-    setElapsedTime(unloadTime - loadTime); // 소요시간을 상태로 설정합니다.
-    setIsGameFinished(true); // 게임 종료 상태 설정
+  const handleFinishGame = async () => {
+    const unloadTime = Date.now();
+    const elapsedTime = unloadTime - loadTime;
+    setElapsedTime(elapsedTime);
+
+    if (userId && elapsedTime) {
+      try {
+        const leaderboardRef = collection(db, "leaderboard");
+        await addDoc(leaderboardRef, {
+          userId,
+          time: elapsedTime,
+        });
+        setIsGameFinished(true); // 게임 종료 상태 설정
+      } catch (error) {
+        console.error("Error adding document: ", error);
+      }
+    }
   };
 
   const handleSendMessage = async () => {
@@ -165,7 +181,7 @@ function GameComponent() {
       if (JSON.parse(data.message.trim()).roomChanged) {
         await handleImageChange(JSON.parse(data.message.trim()).text);
       } else if (JSON.parse(data.message.trim()).gameFinished) {
-        handleFinishGame();
+        await handleFinishGame();
       }
     } catch (error) {
       console.error("Failed to send message", error); // 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.
