@@ -56,29 +56,36 @@ function ThemeComponent() {
       {isThemeSelected === false ? (
         // isThemeSelected가 false인 경우
         <div className="flex flex-col items-center justify-center h-screen bg-transparent text-white w-full px-4">
-          <h1 className="text-2xl font-bold mb-8">
+          <h1 className="text-2xl font-regular mb-8">
             {/* 글자 크기를 2xl로 설정하며, 볼드체로, 아래쪽 여백을 줍니다. */}
-            원하는 방탈출 컨셉을 선택해주세요
+            원하는 방탈출 테마를 선택해주세요
           </h1>
           <div
             className="w-full h-64 p-4 my-8 flex flex-col items-center justify-center"
             // 메시지 영역의 스타일을 설정합니다.
-            style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+            style={{ 
+              backgroundColor: "rgba(0, 0, 0, 0.3)", // 배경색을 반투명한 검은색으로 설정합니다.
+              backdropFilter: "blur(6px)", // 배경 블러를 추가합니다.
+              width: "600px", // 너비를 80%로 설정합니다.
+              height: "400px", // 높이를 80%로 설정합니다.
+              border: "0.8px solid rgba(255, 255, 255, 0.6)",
+              borderRadius: "20px",
+            }}
             // 배경색을 반투명한 검은색으로 설정합니다.
           >
             {/* 입력 및 전송 버튼을 포함하는 컨테이너입니다. */}
             {/* 챗봇이 제시하는 테마 제시 */}
             {isLoading ? (
-              <p>GPT가 컨셉을 생성하고 있습니다. 잠시만 기다려주세요...</p>
+              <p>GPT가 테마를 생성하고 있습니다. 잠시만 기다려주세요...</p>
             ) : (
               // 로딩 중일 때 표시할 메시지입니다.
               <Suspense fallback={<p>Loading...</p>}>
                 {/* Suspense 컴포넌트를 사용하여 비동기 렌더링을 처리합니다. */}
                 {themes?.map((theme) => (
-                  <div key={theme} className="mb-2">
+                  <div key={theme} className="m-4">
                     {/* 각 테마를 표시할 div입니다. */}
                     <button
-                      className="w-full h-10 text-lg bg-transparent hover:underline focus:outline-none"
+                      className="w-full h-10 text-xl bg-transparent hover:bg-white hover:text-black focus:outline-none px-4 rounded-lg"
                       // 버튼 스타일을 설정합니다.
                       onClick={() => {
                         setSelectedTheme(theme); // 선택한 테마를 상태로 설정합니다.
@@ -97,17 +104,17 @@ function ThemeComponent() {
       ) : (
         // isThemeSelected가 true인 경우
         <>
-          <h1 className="text-center text-2xl font-bold mb-4">
-            {/* 텍스트를 가운데 정렬하고, 글자 크기를 2xl로 설정하며, 볼드체로, 아래쪽 여백을 줍니다. */}
-            이야기 속에 숨겨진 문제를 풀어 모든 방을 탈출하시면 성공입니다.
+          <h1 className="text-center text-2xl font-regular mb-4">
+            {/* 텍스트를 가운데 정렬하고, 글자 크기를 2xl로 설정하며, 아래쪽 여백을 줍니다. */}
+            이야기 속 숨겨진 문제를 풀어 모든 방을 탈출하시면 성공입니다.
           </h1>
-          <h1 className="text-2xl font-bold mb-4">
+          <h1 className="text-2xl font-regular mb-20">
             {/* 글자 크기를 2xl로 설정하며, 볼드체로, 아래쪽 여백을 줍니다. */}
             행운을 빕니다.
           </h1>
           <button
             className={
-              "w-40 py-2 px-4 bg-transparent hover:underline focus:outline-none"
+              "w-24 p-2 text-lg rounded-lg bg-transparent hover:bg-white hover:bg-opacity-15 focus:outline-none"
             }
             // 버튼 스타일을 설정합니다.
             onClick={() =>

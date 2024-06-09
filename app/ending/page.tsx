@@ -28,22 +28,37 @@ function EndingComponent() {
         backgroundSize: "cover",
       }}
     >
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold mb-2">탈출에 성공했습니다.</h1>
-        <p className="text-xl mb-4">나의 기록</p>
-        <h2 className="text-6xl font-bold">{formatTime(Number(time))}</h2>
-      </div>
-      <div className="text-center mb-8">
-        <p className="text-2xl">유저 ID: {userId}</p>
-      </div>
-      <button
-        className={
-          "w-40 py-2 px-4 bg-transparent hover:underline focus:outline-none text-xl"
-        }
-        onClick={() => router.push(`/leaderboard?userId=${userId}`)}
+      <h1 className="text-4xl font-normal mb-16">탈출에 성공했습니다</h1>
+      <div
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.3)",
+          backdropFilter: "blur(6px)",
+          width: "600px",
+          padding: "54px",
+          borderRadius: "20px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          boxShadow: "0 0 50px rgba(219, 219, 219, 0.3)",
+        }}
       >
-        리더보드 확인
-      </button>
+        <div className="text-center mb-8">
+          <p className="text-2xl text-gray-200 font-normal mb-12">
+            <span className="font-bold text-3xl mr-2">{userId}</span>님의 기록
+          </p>
+          <h2 className="text-8xl font-bold my-8">{formatTime(Number(time))}</h2>
+        </div>
+        <button
+          className={
+            "w-50 py-3 px-4 bg-transparent border border-white border-opacity-40 hover:bg-white hover:bg-opacity-15 rounded-lg after:focus:outline-none text-xl"
+          }
+          onClick={() => router.push(`/leaderboard?userId=${userId}`)}
+        >
+          리더보드 확인하기
+        </button>
+      </div>
     </div>
   );
 }

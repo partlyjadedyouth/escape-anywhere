@@ -45,7 +45,7 @@ export default function Login() {
         {/* flex 컨테이너로, 세로 방향으로 정렬하고, 가운데 정렬합니다. */}
         <p className="font-normal mb-10 text-2xl text-center leading-loose">
           {/* 타이틀 텍스트로, 가운데 정렬하고, 줄간격을 넓게 설정합니다. */}
-          원하시는 아이디를 설정해주세요. <br /> 만약 탈출에 성공하신다면 해당 아이디로 리더보드에 저장됩니다.
+          원하시는 아이디를 설정해주세요 <br /> 만약 탈출에 성공하신다면 해당 아이디로 리더보드에 저장됩니다
         </p>
         <div>
           {/* input과 버튼을 포함하는 div입니다. */}
@@ -56,7 +56,10 @@ export default function Login() {
             // input 요소의 값을 userId 상태로 설정합니다.
             onChange={handleChange}
             // input 요소의 변경 이벤트를 handleChange 함수로 설정합니다.
-            className="text-center p-2 border border-gray-300 rounded text-black w-80"
+            className="text-center p-2 border rounded-lg bg-gray-200 border-gray-300 text-black w-80"
+            style={{
+              boxShadow: "0px -0.5px 1px 0px rgba(255, 255, 255, 0.30) inset, 0px -0.5px 1px 0px rgba(255, 255, 255, 0.25) inset, 1px 1.5px 4px 0px rgba(0, 0, 0, 0.08) inset, 1px 1.5px 4px 0px rgba(0, 0, 0, 0.10) inset"
+            }}
             // CSS 클래스를 설정하여 스타일을 지정합니다.
             placeholder="ID를 입력해주세요"
             // input 요소의 플레이스홀더를 설정합니다.
@@ -64,14 +67,14 @@ export default function Login() {
           <button
             onClick={generateRandomId}
             // 버튼 클릭 이벤트를 generateRandomId 함수로 설정합니다.
-            className="mt-10 mb-10 ml-5 w-30 text-white font-xl border-gray-300 rounded border p-2 hover:bg-white hover:border-white hover:text-black transition-colors duration-300"
+            className="mt-10 mb-10 ml-5 w-30 rounded-lg text-white font-xl border-gray-300 border p-2 hover:bg-white hover:border-white hover:text-black transition-colors duration-300 backdrop-blur-lg"
             // CSS 클래스를 설정하여 스타일을 지정합니다.
           >
             랜덤 ID 생성
             {/* 버튼의 텍스트입니다. */}
           </button>
         </div>
-        <button className="mt-10 rounded py-2 px-4 font-2xl hover:bg-white hover:text-black transition-colors duration-300" onClick={handleClick}>
+        <button className="mt-10 rounded-lg py-2 px-4 text-xl hover:bg-white hover:bg-opacity-15 transition-colors duration-300" onClick={handleClick}>
           {/* 여백과 패딩을 주고, 텍스트 크기를 크게 설정하며, 호버 시 배경 색은 흰색, 텍스트 색은 검은색으로 바뀌도록 스타일을 지정한 버튼입니다. */}
           완료
           {/* 버튼의 텍스트입니다. */}

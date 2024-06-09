@@ -195,7 +195,7 @@ function GameComponent() {
       {/* 화면을 가득 채우는 flex 컨테이너 */}
       {isImageLoading ? (
         <>
-          <div className="w-full flex flex-col items-center justify-center text-3xl">
+          <div className="w-full flex flex-col items-center justify-center text-2xl">
             이동 중입니다...
           </div>
         </>
@@ -212,7 +212,9 @@ function GameComponent() {
             {/* 우측에 메시지를 주고 받는 창을 배치합니다. */}
             <div
               className="w-full mb-4 overflow-auto"
-              style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+              style={{
+                backgroundColor: "transparent", // 배경색을 투명으로 설정합니다.
+              }}
             >
               {texts.map((text, index) => (
                 <div
@@ -224,13 +226,15 @@ function GameComponent() {
                   }}
                 >
                   <div
-                    className={`mb-4 p-2 rounded-lg ${
+                    className={`mb-4 p-4 rounded-lg ${
                       text.role === "assistant"
-                        ? "bg-white text-white bg-opacity-20"
-                        : "bg-green-500 text-white bg-opacity-60 mr-10"
+                        ? "bg-white bg-opacity-10 border border-white border-opacity-40 text-white"
+                        : "bg-white text-white bg-opacity-15 mr-16"
                     }`}
                     style={{
                       maxWidth: "80%",
+                      lineHeight: "1.6", // 줄간격을 설정합니다.
+                      boxShadow: "0px 0px 50px 10px rgba(0, 0, 0, 0.25)",
                     }}
                   >
                     {text.content}
@@ -241,18 +245,22 @@ function GameComponent() {
             </div>
             {isGameFinished ? (
               <button
-                className="w-40 py-2 px-4 bg-transparent hover:underline focus:outline-none"
+                className="w-48 my-5 py-2 px-4 rounded-lg bg-transparent hover:bg-white hover:bg-opacity-15 focus:outline-none"
                 onClick={() =>
                   router.push(`/ending?userId=${userId}&time=${elapsedTime}`)
                 }
+                style={{
+                  whiteSpace: "nowrap"
+                }}
               >
-                다음으로 넘어가기
+                <span>다음으로 넘어가기</span>
+                <span className="ml-6">&gt;</span>
               </button>
             ) : (
               <div className="w-full flex items-center justify-between mb-4">
                 <input
                   type="text"
-                  className={`flex-grow h-10 p-4 bg-white text-black ${
+                  className={`flex-grow h-12 p-4 rounded-lg bg-white bg-opacity-15 text-white ${
                     isLoading ? "opacity-50" : ""
                   }`}
                   value={input}
@@ -264,15 +272,29 @@ function GameComponent() {
                   }}
                   placeholder={isLoading ? "로딩 중..." : ""}
                   disabled={isLoading} // 로딩 중일 때 입력 필드를 비활성화합니다.
+                  style={{
+                    borderRadius: "10px",
+                    opacity: "0.7",
+                    background: "linear-gradient(0deg, rgba(38, 38, 38, 0.60) 0%, rgba(38, 38, 38, 0.60) 100%), rgba(208, 208, 208, 0.50)",
+                    backgroundBlendMode: "luminosity, color-burn",
+                    boxShadow: "0px -0.5px 1px 0px rgba(255, 255, 255, 0.30) inset, 0px -0.5px 1px 0px rgba(255, 255, 255, 0.25) inset, 1px 1.5px 4px 0px rgba(0, 0, 0, 0.08) inset, 1px 1.5px 4px 0px rgba(0, 0, 0, 0.10) inset",
+                  }}
                 />
                 <button
-                  className={`w-40 h-10 bg-transparent hover:underline focus:outline-none ${
+                  className={`w-12 h-12 bg-transparent mx-2 rounded-lg p-3 hover:bg-white hover:bg-opacity-15  focus:outline-none ${
                     isLoading ? "opacity-50" : ""
                   }`}
                   onClick={handleSendMessage}
                   disabled={isLoading} // 로딩 중일 때 버튼을 비활성화합니다.
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
-                  전송
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="36" viewBox="0 0 28 30" fill="none">
+                    <path d="M14 2V28M14 2L2 14.6176M14 2L26 14.6176" stroke="white" stroke-opacity="0.96" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
                 </button>
               </div>
             )}
