@@ -59,7 +59,7 @@ export default function Ending() {
         }
         onClick={handleSave}
       >
-        리더보드 확인하기
+        리더보드 확인
       </button>
     </div>
   );
