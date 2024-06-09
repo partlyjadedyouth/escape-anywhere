@@ -11,13 +11,14 @@ export async function POST(request: NextRequest) {
     const response = await openai.images.generate({
       // OpenAI의 DALL-E 모델을 사용하여 이미지를 생성합니다.
 
-      // model: "dall-e-3", // 사용할 모델을 지정합니다.
-      model: "dall-e-2", // 사용할 모델을 지정합니다.
+      model: "dall-e-3", // 사용할 모델을 지정합니다.
+      // model: "dall-e-2", // 사용할 모델을 지정합니다.
       prompt: text, // 이미지 생성을 위한 프롬프트를 설정합니다.
       n: 1, // 생성할 이미지의 수를 설정합니다.
-      size: "256x256", // 이미지의 크기를 설정합니다.
-      // quality: "standard", // 이미지의 퀄리티를 설정합니다. (Dall-E 3 전용)
-      // style: "vivid", // 이미지의 스타일을 설정합니다. (Dall-E 3 전용)
+      // size: "256x256", // 이미지의 크기를 설정합니다.
+      size: "1024x1024", // 이미지의 크기를 설정합니다.
+      quality: "standard", // 이미지의 퀄리티를 설정합니다. (Dall-E 3 전용)
+      style: "vivid", // 이미지의 스타일을 설정합니다. (Dall-E 3 전용)
     });
 
     const imageUrl = response.data[0].url; // 응답에서 생성된 이미지의 URL을 추출합니다.
