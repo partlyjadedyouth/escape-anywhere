@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { db } from "@/firebase";
 import { collection, addDoc } from "firebase/firestore";
 
-export default function Ending() {
+function EndingComponent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const userId = searchParams.get("userId");
@@ -62,5 +62,13 @@ export default function Ending() {
         리더보드 확인
       </button>
     </div>
+  );
+}
+
+export default function Ending() {
+  return (
+    <Suspense>
+      <EndingComponent />
+    </Suspense>
   );
 }
