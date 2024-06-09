@@ -29,7 +29,7 @@ function ThemeComponent() {
             messages: [...systemPrompts], // 시스템 프롬프트를 메시지로 포함하여 보냅니다.
           }),
         });
-        
+
         const data = await response.json(); // 서버로부터 응답을 JSON 형태로 파싱합니다.
         setThemes(JSON.parse(data.message)); // 응답 메시지를 JSON 파싱하여 테마 목록으로 설정합니다.
       } catch (error) {
@@ -51,7 +51,7 @@ function ThemeComponent() {
         backgroundImage: "url('/image/background.png')",
         backgroundSize: "cover",
       }}
-      // 배경 이미지를 설정합니다.
+    // 배경 이미지를 설정합니다.
     >
       {isThemeSelected === false ? (
         // isThemeSelected가 false인 경우

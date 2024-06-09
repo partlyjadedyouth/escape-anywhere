@@ -1,6 +1,6 @@
 "use client"; // 이 파일이 클라이언트 측에서 실행됨을 나타냅니다.
 
-
+import { generateImage } from "@/lib/utils/generateImage";
 import { systemPrompts, ChatRequest, ChatResponse } from "@/lib/utils/systemPrompts";
 import { set } from "firebase/database";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -18,7 +18,7 @@ function GameComponent() {
   const [texts, setTexts] = useState<ChatRequest[]>([]); // 텍스트 목록을 상태로 관리합니다.
   const [input, setInput] = useState<string>(""); // input 상태를 빈 문자열로 초기화합니다.
   const [isLoading, setIsLoading] = useState<boolean>(false); // 로딩 상태를 추적하는 새로운 상태 변수
-  const [imageURL, setImageURL] = useState<string>("url('/image/testimage.png')")
+  const [imageURL, setImageURL] = useState<string>('/image/testimage.png')
 
   const loadTime = Date.now(); // 페이지 로드 시간 기록
   const router = useRouter(); // useRouter 훅을 사용하여 router 객체를 생성합니다.
@@ -28,6 +28,11 @@ function GameComponent() {
   const [isRoomChanged, setIsRoomChanged] = useState<boolean>(false)
   const [isGameFinished, setIsGameFinished] = useState<boolean>(false)
 
+
+  const handleImageChange = async (text: string) => {
+    const url = await generateImage(text)
+    setImageURL(url)
+  }
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 초기 메시지를 보내는 함수입니다.
@@ -52,6 +57,10 @@ function GameComponent() {
           role: "assistant", // 발신자는 어시스턴트입니다.
           content: data.message, // 서버로부터 받은 메시지를 설정합니다.
         };
+
+        if (JSON.parse(data.message.trim()).roomChanged) {
+          await handleImageChange(JSON.parse(data.message.trim()).text)
+        }
 
         const initialBotText: ChatRequest = {
           // 초기 봇 메시지를 생성합니다.
@@ -78,12 +87,6 @@ function GameComponent() {
   useEffect(() => {
     console.log(texts);
   }, [texts]);
-
-  useEffect(() => {
-    if (isRoomChanged) {
-      //이미지 url 교체
-    }
-  }, [isRoomChanged])
 
   useEffect(() => {
     if (isGameFinished) {
@@ -158,7 +161,7 @@ You must never allow the room to be bypassed or the puzzle to be solved based on
       setTexts((prev) => [...prev, botText]); // 이전 텍스트 배열에 봇의 메시지를 추가합니다.
 
       if (JSON.parse(data.message.trim()).roomChanged) {
-        setIsRoomChanged(true)
+        await handleImageChange(JSON.parse(data.message.trim()).text)
       } else if (JSON.parse(data.message.trim()).gameFinished) {
         setIsGameFinished(true)
       }
@@ -176,7 +179,7 @@ You must never allow the room to be bypassed or the puzzle to be solved based on
       <div
         className="w-1/2 h-screen bg-center"
         style={{
-          backgroundImage: imageURL,
+          backgroundImage: `url(${imageURL})`,
           backgroundSize: "cover",
         }}
       ></div>
