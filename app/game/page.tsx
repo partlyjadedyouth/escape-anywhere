@@ -27,8 +27,6 @@ function GameComponent() {
   const router = useRouter(); // useRouter 훅을 사용하여 router 객체를 생성합니다.
 
   const userId = searchParams.get("userId"); // 쿼리 매개변수를 가져옵니다.
-
-  const [isRoomChanged, setIsRoomChanged] = useState<boolean>(false);
   const [isGameFinished, setIsGameFinished] = useState<boolean>(false);
 
   useEffect(() => {
@@ -159,7 +157,6 @@ You must never allow the room to be bypassed or the puzzle to be solved based on
 
       if (JSON.parse(data.message.trim()).roomChanged) {
         await handleImageChange(JSON.parse(data.message.trim()).text)
-        setIsRoomChanged(true);
       } else if (JSON.parse(data.message.trim()).gameFinished) {
         handleFinishGame();
       }
@@ -197,8 +194,8 @@ You must never allow the room to be bypassed or the puzzle to be solved based on
             >
               <div
                 className={`mb-4 p-2 rounded-lg ${text.role === "assistant"
-                    ? "bg-white text-white bg-opacity-20"
-                    : "bg-green-500 text-white bg-opacity-60 mr-10"
+                  ? "bg-white text-white bg-opacity-20"
+                  : "bg-green-500 text-white bg-opacity-60 mr-10"
                   }`}
                 style={{
                   maxWidth: "80%",
