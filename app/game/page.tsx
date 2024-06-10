@@ -90,7 +90,6 @@ function GameComponent() {
         console.error("Failed to send initial message", error); // 초기 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.
       } finally {
         setIsLoading(false); // 응답을 받은 후에 로딩 상태를 false로 설정
-        inputRef.current?.focus(); // inputRef를 사용하여 input 요소에 포커스를 설정합니다.
       }
     };
 
@@ -100,6 +99,12 @@ function GameComponent() {
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [texts, isImageLoading]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      inputRef.current?.focus(); // 로딩 상태가 false가 되면 input 필드에 포커스를 설정합니다.
+    }
+  }, [isLoading]);
 
   const handleFinishGame = async () => {
     const unloadTime = Date.now();
@@ -308,10 +313,10 @@ function GameComponent() {
                     <path
                       d="M14 2V28M14 2L2 14.6176M14 2L26 14.6176"
                       stroke="white"
-                      stroke-opacity="0.96"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeOpacity="0.96"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
                 </button>
