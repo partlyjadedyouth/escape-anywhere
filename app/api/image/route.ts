@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"; // Next.js의 서버 측 요청 및 응답 객체를 임포트합니다.
 import OpenAI from "openai"; // OpenAI 라이브러리를 임포트합니다.
 
+export const maxDuration = 60;
+
 const openai = new OpenAI({ apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY }); // OpenAI 객체를 생성하고 API 키를 설정합니다.
 
 export async function POST(request: NextRequest) {
