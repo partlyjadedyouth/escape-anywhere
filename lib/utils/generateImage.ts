@@ -8,6 +8,7 @@ export const generateImage = async (text: string) => {
             },
             body: JSON.stringify({ text }),
         });
+        console.log(response)
         const data = await response.json();
         console.log(data.imageUrl)
         return data.imageUrl;
