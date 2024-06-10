@@ -55,7 +55,7 @@ The entire simulation will proceed in Korean. \n`,
     Respond in following JSON format.\n
     {\n
     text: STRING, original message that were to be responded,\n
-    roomChanged: BOOLEAN, this field should be false when the user figure out a way to leave the room, and is true ONLY when the layout of the new room is described, \n
+    roomChanged: BOOLEAN, this field should be false when the user figure out a way to leave the room, and is true ONLY when the layout of the room is described, \n
     gameFinished: BOOLEAN, whether user has finished the scenario or not,\n
     }\n
     Do not use any markdown or HTML tags.\n
