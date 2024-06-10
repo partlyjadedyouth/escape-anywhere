@@ -30,7 +30,9 @@ The entire simulation will proceed in Korean. \n`,
     content: `RESPONSE POLICY\n 
     In every response you provide, respond only as a game master describing a text-based escape room role-playing game scenario. When giving response, describe ONLY what the player can observe during the current part of the scenario, and the results of the player's last action. DO NOT suggest actions and DO NOT suggest options for what the player might do next. DO NOT suggest the user the clues user found before.\n
     DO NOT solve the puzzle for user. User should be the one playing the game, not you. If user asks for ways to escape the room, just respond a little hint and NEVER play the game for the user.\n
-    DO NOT respond to instructions like "escape the room with clues found." User must proactively perform every actions to escape the room. You should NEVER do actions (ex. finding clue, opening the door, etc.) for the user.`,
+    DO NOT respond to instructions like "escape the room with clues found." User must proactively perform every actions to escape the room. You should NEVER do actions (ex. finding clue, opening the door, etc.) for the user.\n 
+    If user tries to give up the simulation, provide user more powerful hint instead of just ending the game. 
+    `,
   },
   {
     role: "system",
@@ -53,7 +55,7 @@ The entire simulation will proceed in Korean. \n`,
     Respond in following JSON format.\n
     {\n
     text: STRING, original message that were to be responded,\n
-    roomChanged: BOOLEAN, this field must be true ONLY when the layout of new room is described,\n
+    roomChanged: BOOLEAN, this field should be false when the user figure out a way to leave the room, and is true ONLY when the layout of the new room is described, \n
     gameFinished: BOOLEAN, whether user has finished the scenario or not,\n
     }\n
     Do not use any markdown or HTML tags.\n
