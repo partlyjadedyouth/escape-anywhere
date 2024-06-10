@@ -30,7 +30,9 @@ function GameComponent() {
 
   const [loadTime, setLoadTime] = useState<number>(0); // loadTime 상태 추가
   const [elapsedTime, setElapsedTime] = useState<number>(0); // 소요시간 상태 추가
+
   const messageEndRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const router = useRouter(); // useRouter 훅을 사용하여 router 객체를 생성합니다.
 
@@ -88,6 +90,7 @@ function GameComponent() {
         console.error("Failed to send initial message", error); // 초기 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.
       } finally {
         setIsLoading(false); // 응답을 받은 후에 로딩 상태를 false로 설정
+        inputRef.current?.focus(); // inputRef를 사용하여 input 요소에 포커스를 설정합니다.
       }
     };
 
@@ -96,7 +99,7 @@ function GameComponent() {
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [texts]);
+  }, [texts, isImageLoading]);
 
   const handleFinishGame = async () => {
     const unloadTime = Date.now();
@@ -208,7 +211,7 @@ function GameComponent() {
               backgroundSize: "cover",
             }}
           ></div>
-          <div className="w-1/2 h-full flex flex-col items-center justify-end bg-transparent text-white px-4">
+          <div className="w-1/2 h-full flex flex-col items-center justify-end bg-transparent text-white px-4 pt-2">
             {/* 우측에 메시지를 주고 받는 창을 배치합니다. */}
             <div
               className="w-full mb-4 overflow-auto"
@@ -250,7 +253,7 @@ function GameComponent() {
                   router.push(`/ending?userId=${userId}&time=${elapsedTime}`)
                 }
                 style={{
-                  whiteSpace: "nowrap"
+                  whiteSpace: "nowrap",
                 }}
               >
                 <span>다음으로 넘어가기</span>
@@ -264,6 +267,7 @@ function GameComponent() {
                     isLoading ? "opacity-50" : ""
                   }`}
                   value={input}
+                  ref={inputRef}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyUp={(e) => {
                     if (e.key === "Enter") {
@@ -275,9 +279,11 @@ function GameComponent() {
                   style={{
                     borderRadius: "10px",
                     opacity: "0.7",
-                    background: "linear-gradient(0deg, rgba(38, 38, 38, 0.60) 0%, rgba(38, 38, 38, 0.60) 100%), rgba(208, 208, 208, 0.50)",
+                    background:
+                      "linear-gradient(0deg, rgba(38, 38, 38, 0.60) 0%, rgba(38, 38, 38, 0.60) 100%), rgba(208, 208, 208, 0.50)",
                     backgroundBlendMode: "luminosity, color-burn",
-                    boxShadow: "0px -0.5px 1px 0px rgba(255, 255, 255, 0.30) inset, 0px -0.5px 1px 0px rgba(255, 255, 255, 0.25) inset, 1px 1.5px 4px 0px rgba(0, 0, 0, 0.08) inset, 1px 1.5px 4px 0px rgba(0, 0, 0, 0.10) inset",
+                    boxShadow:
+                      "0px -0.5px 1px 0px rgba(255, 255, 255, 0.30) inset, 0px -0.5px 1px 0px rgba(255, 255, 255, 0.25) inset, 1px 1.5px 4px 0px rgba(0, 0, 0, 0.08) inset, 1px 1.5px 4px 0px rgba(0, 0, 0, 0.10) inset",
                   }}
                 />
                 <button
@@ -292,8 +298,21 @@ function GameComponent() {
                     justifyContent: "center",
                   }}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="36" viewBox="0 0 28 30" fill="none">
-                    <path d="M14 2V28M14 2L2 14.6176M14 2L26 14.6176" stroke="white" stroke-opacity="0.96" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="36"
+                    viewBox="0 0 28 30"
+                    fill="none"
+                  >
+                    <path
+                      d="M14 2V28M14 2L2 14.6176M14 2L26 14.6176"
+                      stroke="white"
+                      stroke-opacity="0.96"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
                   </svg>
                 </button>
               </div>
