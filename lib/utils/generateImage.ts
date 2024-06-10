@@ -1,4 +1,5 @@
 export const generateImage = async (text: string) => {
+    console.log(text)
     try {
         const response = await fetch("/api/image", {
             method: "POST",
@@ -8,6 +9,7 @@ export const generateImage = async (text: string) => {
             body: JSON.stringify({ text }),
         });
         const data = await response.json();
+        console.log(data.imageUrl)
         return data.imageUrl;
     } catch (error) {
         console.error("Error generating image:", error);
