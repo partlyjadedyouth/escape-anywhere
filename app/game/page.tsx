@@ -5,6 +5,7 @@ import {
   systemPrompts,
   ChatRequest,
   ChatResponse,
+  ChatJSON,
 } from "@/lib/utils/systemPrompts";
 
 import { useRouter, useSearchParams } from "next/navigation";
@@ -178,19 +179,31 @@ function GameComponent() {
 
       setMessages((prev) => [...prev, botMessage]); // 이전 메시지 배열에 봇의 메시지를 추가합니다.
 
+      // JSON parsing 과정에서 발생하는 오류 해결을 위한 try-catch
+      let parsedBotMessage: ChatJSON;
+      try {
+        parsedBotMessage = JSON.parse(data.message.trim());
+
+        if (parsedBotMessage.roomChanged) {
+          await handleImageChange(parsedBotMessage.text);
+        } else if (parsedBotMessage.gameFinished) {
+          await handleFinishGame();
+        }
+      } catch (error) {
+        parsedBotMessage = {
+          text: "에러가 발생하였습니다. 메시지를 다시 보내주세요.",
+          roomChanged: false,
+          gameFinished: false,
+        };
+      }
+
       const botText: ChatRequest = {
         // 봇의 응답 메시지를 생성합니다.
         role: "assistant", // 발신자는 봇입니다.
-        content: JSON.parse(data.message.trim()).text, // 서버로부터 받은 메시지를 설정합니다.
+        content: parsedBotMessage.text, // 서버로부터 받은 메시지를 설정합니다.
       };
 
       setTexts((prev) => [...prev, botText]); // 이전 텍스트 배열에 봇의 메시지를 추가합니다.
-
-      if (JSON.parse(data.message.trim()).roomChanged) {
-        await handleImageChange(JSON.parse(data.message.trim()).text);
-      } else if (JSON.parse(data.message.trim()).gameFinished) {
-        await handleFinishGame();
-      }
     } catch (error) {
       console.error("Failed to send message", error); // 메시지 전송에 실패한 경우 에러를 콘솔에 출력합니다.
     } finally {
