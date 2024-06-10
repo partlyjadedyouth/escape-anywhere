@@ -12,7 +12,6 @@ export async function POST(request: NextRequest) {
   try {
     const response = await openai.images.generate({
       // OpenAI의 DALL-E 모델을 사용하여 이미지를 생성합니다.
-
       model: "dall-e-3", // 사용할 모델을 지정합니다.
       // model: "dall-e-2", // 사용할 모델을 지정합니다.
       prompt: text, // 이미지 생성을 위한 프롬프트를 설정합니다.
