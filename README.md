@@ -12,9 +12,15 @@
 ### AI
 - GPT-4o
 - Dall-E 3
+
+## 👨‍🚀 Members
+- 박준영(전기정보공학부)
+- 박영근(경영학과)
+- 윤병현(산업공학과)
+- 최윤서(식물생산과학부)
   
 ## 🗓️ Production Timeframe
-2024년 4월 29일 ~ 2024년 6월 9일
+2024년 5월 7일 ~ 2024년 6월 9일
 
 ## 🎮 How to Play?
 https://chat-escape-room.vercel.app/
