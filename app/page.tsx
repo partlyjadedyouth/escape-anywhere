@@ -1,9 +1,6 @@
 "use client"; // 이 파일이 클라이언트 측에서 실행됨을 나타냅니다.
 
 import { useRouter } from "next/navigation"; // Next.js의 useRouter 훅을 임포트합니다.
-import { useEffect } from "react";
-import { NextResponse } from "next/server";
-import { useAppContext } from "@/lib/utils/appContext";
 
 export default function Home() {
   // Home 컴포넌트를 기본으로 내보냅니다.
