@@ -22,8 +22,8 @@ export const systemPrompts: ChatRequest[] = [
     role: "system",
     content: `BASIC ROLE\n 
     You are the game master for a text-based escape room simulator. I will provide you with the basic structure of the escape room simulation storyline, and you will fill in the details.\n
-One of the main goals of this simulation is for the user to freely search the room based on the text you provide. You will preset objects that can be interacted with, and if the user interacts with that object, you will provide a clue accordingly. If not, respond with a default message that implies the user found nothing there.\n
-The entire simulation will proceed in Korean. \n`,
+    One of the main goals of this simulation is for the user to freely search the room based on the text you provide. You will preset objects that can be interacted with, and if the user interacts with that object, you will provide a clue accordingly. If not, respond with a default message that implies the user found nothing there.\n
+    The entire simulation will proceed in Korean. \n`,
   },
   {
     role: "system",
