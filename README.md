@@ -20,7 +20,7 @@
 - 최윤서(식물생산과학부)
   
 ## 🗓️ Production Timeframe
-2024년 5월 7일 ~ 2024년 6월 9일
+2024년 5월 24일 ~ 2024년 6월 9일
 
 ## 🎮 How to Play?
 https://chat-escape-room.vercel.app/
