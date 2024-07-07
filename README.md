@@ -23,4 +23,4 @@
 2024년 5월 24일 ~ 2024년 6월 9일
 
 ## 🎮 URL
-https://chat-escape-room.vercel.app/
+https://escape-anywhere.vercel.app/
